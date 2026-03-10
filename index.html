@@ -42,14 +42,12 @@
       border-radius: var(--radius); padding: 2rem;
       box-shadow: 0 0 50px rgba(192,132,252,.12);
     }
-
     h1 {
       font-size: 1.6rem; font-weight: 700;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text; margin-bottom: .4rem;
     }
-    h2 { font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; }
     p { color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
     .emoji-big { font-size: 3.2rem; display: block; text-align: center; margin-bottom: 1rem; }
 
@@ -67,81 +65,90 @@
     .btn-primary:hover { box-shadow: 0 6px 28px rgba(192,132,252,.55); }
     .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
 
-    /* Clue map */
-    .clue-map {
+    /* ── Chat ── */
+    .chat-wrap {
+      display: flex; flex-direction: column; height: 100%;
+    }
+    .chat-header {
+      display: flex; align-items: center; gap: .8rem;
+      padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;
+    }
+    .chat-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
       display: flex; align-items: center; justify-content: center;
-      flex-wrap: wrap; gap: 0; margin: 1.8rem 0;
+      font-size: 1.2rem; flex-shrink: 0;
     }
-    .clue-node {
-      display: flex; flex-direction: column; align-items: center; gap: .4rem;
-      position: relative;
-    }
-    .clue-circle {
-      width: 56px; height: 56px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; border: 2px solid var(--border);
-      background: #1a1a3a; transition: all .3s; position: relative; z-index: 1;
-    }
-    .clue-node.unlocked .clue-circle {
-      border-color: var(--accent); background: rgba(192,132,252,.15);
-      box-shadow: 0 0 16px rgba(192,132,252,.4); cursor: pointer;
-    }
-    .clue-node.unlocked .clue-circle:hover {
-      transform: scale(1.1); box-shadow: 0 0 24px rgba(192,132,252,.6);
-    }
-    .clue-node.done .clue-circle {
-      border-color: var(--success); background: rgba(52,211,153,.12);
-      box-shadow: 0 0 12px rgba(52,211,153,.25); cursor: pointer;
-    }
-    .clue-node.final-node .clue-circle { width: 64px; height: 64px; font-size: 1.7rem; }
-    .clue-node.final-node.unlocked .clue-circle {
-      border-color: var(--gold); background: rgba(251,191,36,.15);
-      box-shadow: 0 0 20px rgba(251,191,36,.45);
-      animation: pulse 1.5s infinite; cursor: pointer;
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 20px rgba(251,191,36,.45); }
-      50%      { box-shadow: 0 0 36px rgba(251,191,36,.7); }
-    }
-    .clue-label {
-      font-size: .7rem; color: var(--muted); text-align: center;
-      max-width: 60px; line-height: 1.2;
-    }
-    .clue-node.unlocked .clue-label,
-    .clue-node.done .clue-label { color: var(--text); }
-    .clue-connector {
-      width: 32px; height: 2px; background: var(--border);
-      margin-bottom: 20px; flex-shrink: 0; transition: background .4s;
-    }
-    .clue-connector.active { background: var(--accent); }
+    .chat-avatar-info .name { font-weight: 600; color: var(--text); font-size: .95rem; }
+    .chat-avatar-info .status { font-size: .75rem; color: var(--success); }
 
-    /* Clue popup */
-    .clue-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.7); z-index: 200;
-      align-items: center; justify-content: center; padding: 1.5rem;
+    .messages {
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+      gap: .8rem; min-height: 320px; max-height: 400px;
+      padding-right: .3rem; margin-bottom: 1rem;
     }
-    .clue-overlay.open { display: flex; animation: fadeIn .25s ease; }
-    .clue-popup {
-      background: var(--card); border: 1px solid var(--accent);
-      border-radius: var(--radius); padding: 2rem; max-width: 420px; width: 100%;
-      box-shadow: 0 0 60px rgba(192,132,252,.3); position: relative;
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-track { background: transparent; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    .msg {
+      display: flex; gap: .6rem; animation: fadeIn .3s ease;
     }
-    .clue-popup .clue-num {
-      font-size: .75rem; color: var(--accent); font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase; margin-bottom: .3rem;
+    .msg.user { flex-direction: row-reverse; }
+    .msg-bubble {
+      max-width: 80%; padding: .7rem 1rem; border-radius: 1rem;
+      font-size: .9rem; line-height: 1.5;
     }
-    .clue-popup .clue-body {
-      font-size: 1.05rem; color: var(--text); line-height: 1.7; margin-bottom: 1.5rem;
+    .msg.bot .msg-bubble {
+      background: #1e1e38; border: 1px solid var(--border);
+      color: var(--text); border-top-left-radius: .2rem;
     }
-    .clue-popup .clue-emoji { font-size: 2.5rem; display: block; text-align: center; margin-bottom: 1rem; }
-    .btn-close {
-      position: absolute; top: 1rem; right: 1rem;
-      background: none; border: none; color: var(--muted);
-      font-size: 1.3rem; cursor: pointer; padding: .2rem .5rem;
-      border-radius: .4rem; transition: color .2s;
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; border-top-right-radius: .2rem;
     }
-    .btn-close:hover { color: var(--text); }
+    .msg-icon {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: .9rem;
+      background: #1e1e38; border: 1px solid var(--border); align-self: flex-end;
+    }
+    .msg.user .msg-icon { background: rgba(192,132,252,.2); border-color: var(--accent); }
+
+    /* typing indicator */
+    .typing .msg-bubble {
+      display: flex; gap: 4px; align-items: center; padding: .8rem 1rem;
+    }
+    .dot {
+      width: 6px; height: 6px; background: var(--muted); border-radius: 50%;
+      animation: bounce .9s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .15s; }
+    .dot:nth-child(3) { animation-delay: .3s; }
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); }
+      30%          { transform: translateY(-6px); }
+    }
+
+    .chat-input-row {
+      display: flex; gap: .5rem;
+    }
+    .chat-input {
+      flex: 1; padding: .7rem 1rem; background: var(--bg);
+      border: 1.5px solid var(--border); border-radius: .7rem;
+      color: var(--text); font-size: .95rem; outline: none;
+      transition: border-color .2s; resize: none; font-family: inherit;
+    }
+    .chat-input:focus { border-color: var(--accent); }
+    .btn-send {
+      width: 46px; height: 46px; border-radius: .7rem; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; color: #fff; font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-send:hover { box-shadow: 0 4px 16px rgba(192,132,252,.5); }
+    .btn-send:active { transform: scale(.93); }
+    .btn-send:disabled { opacity: .4; cursor: not-allowed; }
 
     /* Hotel cards */
     .hotels-grid { display: grid; gap: .8rem; margin-top: 1rem; }
@@ -157,7 +164,6 @@
     .hotel-card .hotel-name { font-weight: 600; color: var(--text); font-size: .95rem; }
     .hotel-card .hotel-desc { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
 
-    /* Final */
     .gift-items { display: grid; gap: .8rem; margin: 1.4rem 0; }
     .gift-item {
       background: var(--bg); border: 1px solid var(--border);
@@ -180,19 +186,6 @@
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
-
-<!-- Popup -->
-<div class="clue-overlay" id="clue-overlay">
-  <div class="clue-popup">
-    <button class="btn-close" onclick="closeClue()">✕</button>
-    <span class="clue-emoji" id="popup-emoji"></span>
-    <div class="clue-num" id="popup-num"></div>
-    <h2 id="popup-title"></h2>
-    <div class="clue-body" id="popup-body"></div>
-    <button class="btn btn-primary" id="popup-btn" onclick="markDone()">Entès! Segueix 👉</button>
-  </div>
-</div>
-
 <div id="app">
 
   <!-- SCREEN 0: Benvinguda -->
@@ -201,18 +194,36 @@
       <span class="emoji-big">🎁</span>
       <h1>Tens un regal especial</h1>
       <p>Hola, <strong>[NOM_PERSONA]</strong>! T'he preparat alguna cosa molt especial.
-      Segueix les pistes per descobrir-ho...</p>
-      <button class="btn btn-primary" onclick="goTo('screen-map')">Descobrir el regal 🗺️</button>
+      Parla amb la guia misteriosa per anar descobrint el teu regal...</p>
+      <button class="btn btn-primary" onclick="goTo('screen-chat')">Descobrir el regal 🔮</button>
     </div>
     <p class="signature">Fet amb <span>♥</span> per <strong>[EL_TEU_NOM]</strong></p>
   </div>
 
-  <!-- SCREEN 1: Mapa -->
-  <div class="screen" id="screen-map">
-    <div class="card">
-      <h1>Mapa del regal</h1>
-      <p>Clica cada pista per descobrir-la. Cada una t'acosta més al regal!</p>
-      <div class="clue-map" id="clue-map"></div>
+  <!-- SCREEN 1: Chat -->
+  <div class="screen" id="screen-chat">
+    <div class="card" style="padding:1.5rem">
+      <div class="chat-wrap">
+        <div class="chat-header">
+          <div class="chat-avatar">🔮</div>
+          <div class="chat-avatar-info">
+            <div class="name">La guia misteriosa</div>
+            <div class="status">● En línia</div>
+          </div>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="chat-input" placeholder="Pregunta alguna cosa..." rows="1"
+            onkeydown="handleKey(event)"></textarea>
+          <button class="btn-send" id="btn-send" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:1rem">
+      <button class="btn btn-primary" style="width:auto;padding:.6rem 1.4rem;font-size:.85rem"
+        onclick="goTo('screen-hotel')">
+        Ja sé el regal! Triar hotel 🏨
+      </button>
     </div>
   </div>
 
@@ -257,7 +268,7 @@
     <div class="card" style="text-align:center">
       <span class="emoji-big" style="font-size:4rem">🎉</span>
       <h1>El teu regal!</h1>
-      <p>Felicitats, <strong>[NOM_PERSONA]</strong>! Aquí tens tot:</p>
+      <p>Felicitats, <strong>[NOM_PERSONA]</strong>!</p>
       <div class="gift-items" style="text-align:left">
         <div class="gift-item">
           <span class="gi-icon">🍽️</span>
@@ -285,114 +296,103 @@
 </div>
 
 <script>
-// =======================================================
-// CONFIGURACIÓ — Edita aquí les teves dades
-// =======================================================
-const CLUES = [
-  {
-    emoji: "🍽️",
-    title: "Pista 1",
-    body: "[PISTA_1] — Ex: \"Inclou menjar... i no qualsevol menjar!\"",
-    label: "Pista 1",
-  },
-  {
-    emoji: "📍",
-    title: "Pista 2",
-    body: "[PISTA_2] — Ex: \"Penseu en un lloc especial per a vosaltres dos...\"",
-    label: "Pista 2",
-  },
-  {
-    emoji: "🌙",
-    title: "Pista 3",
-    body: "[PISTA_3] — Ex: \"I no és només un dia... és també una nit!\"",
-    label: "Pista 3",
-  },
-  {
-    emoji: "🎁",
-    title: "El regal!",
-    body: "Ja ho saps tot... o gairebé! Clica per descobrir el regal complet.",
-    label: "Regal!",
-    isFinal: true,
-  },
-];
-// =======================================================
-
-let currentClueIdx = null;
-let doneMask = [];
+let chatHistory = [];
+let isLoading = false;
 let selectedHotel = null;
-
-function buildMap() {
-  const map = document.getElementById("clue-map");
-  map.innerHTML = "";
-  doneMask = new Array(CLUES.length).fill(false);
-
-  CLUES.forEach((clue, i) => {
-    if (i > 0) {
-      const conn = document.createElement("div");
-      conn.className = "clue-connector";
-      conn.id = "conn-" + i;
-      map.appendChild(conn);
-    }
-    const node = document.createElement("div");
-    node.className = "clue-node" + (clue.isFinal ? " final-node" : "");
-    node.id = "node-" + i;
-    node.innerHTML =
-      "<div class=\"clue-circle\">" + (i === 0 ? clue.emoji : "🔒") + "</div>" +
-      "<div class=\"clue-label\">" + clue.label + "</div>";
-    if (i === 0) {
-      node.classList.add("unlocked");
-      node.onclick = () => openClue(0);
-    }
-    map.appendChild(node);
-  });
-}
-
-function openClue(i) {
-  const clue = CLUES[i];
-  currentClueIdx = i;
-  document.getElementById("popup-emoji").textContent = clue.emoji;
-  document.getElementById("popup-num").textContent = clue.isFinal ? "Regal final" : "Pista " + (i + 1) + " de " + (CLUES.length - 1);
-  document.getElementById("popup-title").textContent = clue.title;
-  document.getElementById("popup-body").textContent = clue.body;
-  document.getElementById("popup-btn").textContent = clue.isFinal ? "Revelar el regal! 🎁" : "Entès! Segueix 👉";
-  document.getElementById("clue-overlay").classList.add("open");
-}
-
-function closeClue() {
-  document.getElementById("clue-overlay").classList.remove("open");
-}
-
-function markDone() {
-  const i = currentClueIdx;
-  doneMask[i] = true;
-  closeClue();
-
-  const node = document.getElementById("node-" + i);
-  node.classList.remove("unlocked");
-  node.classList.add("done");
-  node.querySelector(".clue-circle").textContent = "✅";
-  node.onclick = () => openClue(i);
-
-  if (CLUES[i].isFinal) {
-    goTo("screen-hotel");
-    return;
-  }
-
-  const next = i + 1;
-  if (next < CLUES.length) {
-    const nextNode = document.getElementById("node-" + next);
-    nextNode.classList.add("unlocked");
-    nextNode.querySelector(".clue-circle").textContent = CLUES[next].emoji;
-    nextNode.onclick = () => openClue(next);
-    const conn = document.getElementById("conn-" + next);
-    if (conn) conn.classList.add("active");
-  }
-}
 
 function goTo(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
+  if (id === "screen-chat" && chatHistory.length === 0) {
+    addBotMessage("Hola! 🔮 Soc la guia del teu regal especial. Pregunta'm qualsevol cosa per anar descobrint-lo...");
+  }
+}
+
+function addMessage(role, text) {
+  const container = document.getElementById("messages");
+  const isUser = role === "user";
+  const div = document.createElement("div");
+  div.className = "msg " + (isUser ? "user" : "bot");
+  div.innerHTML =
+    "<div class='msg-icon'>" + (isUser ? "👤" : "🔮") + "</div>" +
+    "<div class='msg-bubble'>" + escapeHtml(text) + "</div>";
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function addBotMessage(text) {
+  chatHistory.push({ role: "assistant", content: text });
+  addMessage("bot", text);
+}
+
+function showTyping() {
+  const container = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "msg bot typing";
+  div.id = "typing-indicator";
+  div.innerHTML =
+    "<div class='msg-icon'>🔮</div>" +
+    "<div class='msg-bubble'><div class='dot'></div><div class='dot'></div><div class='dot'></div></div>";
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById("typing-indicator");
+  if (el) el.remove();
+}
+
+async function sendMessage() {
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
+  input.value = "";
+  input.style.height = "auto";
+  isLoading = true;
+  document.getElementById("btn-send").disabled = true;
+
+  chatHistory.push({ role: "user", content: text });
+  addMessage("user", text);
+  showTyping();
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ messages: chatHistory }),
+    });
+    const data = await res.json();
+    removeTyping();
+    if (data.reply) {
+      addBotMessage(data.reply);
+    } else {
+      addBotMessage("Ups, alguna cosa ha fallat. Torna-ho a intentar!");
+    }
+  } catch {
+    removeTyping();
+    addBotMessage("No puc connectar ara mateix. Comprova la connexió!");
+  }
+
+  isLoading = false;
+  document.getElementById("btn-send").disabled = false;
+  input.focus();
+}
+
+function handleKey(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+  // Auto-resize textarea
+  e.target.style.height = "auto";
+  e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+            .replace(/\n/g,"<br>");
 }
 
 function selectHotel(el, name) {
@@ -418,13 +418,10 @@ function launchConfetti() {
   canvas.height = window.innerHeight;
   const colors = ["#c084fc","#f472b6","#fbbf24","#34d399","#60a5fa","#fff"];
   const pieces = Array.from({ length: 140 }, () => ({
-    x: Math.random() * canvas.width,
-    y: -10 - Math.random() * 200,
-    r: 4 + Math.random() * 7,
-    d: 2 + Math.random() * 3,
+    x: Math.random() * canvas.width, y: -10 - Math.random() * 200,
+    r: 4 + Math.random() * 7, d: 2 + Math.random() * 3,
     color: colors[Math.floor(Math.random() * colors.length)],
-    tilt: Math.random() * 10 - 5,
-    tiltSpeed: Math.random() * .1,
+    tilt: Math.random() * 10 - 5, tiltSpeed: Math.random() * .1,
   }));
   let frame = 0;
   function draw() {
@@ -443,8 +440,6 @@ function launchConfetti() {
   }
   draw();
 }
-
-buildMap();
 </script>
 </body>
 </html>
