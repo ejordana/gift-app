@@ -231,12 +231,12 @@
       <div class="messages" id="messages"></div>
 
       <div class="suggestions" id="suggestions">
-        <button class="sug-btn" onclick="askSuggestion(this)">Quin és el regal?</button>
-        <button class="sug-btn" onclick="askSuggestion(this)">On és el restaurant?</button>
-        <button class="sug-btn" onclick="askSuggestion(this)">Quan és?</button>
-        <button class="sug-btn" onclick="askSuggestion(this)">Quina activitat fem?</button>
-        <button class="sug-btn" onclick="askSuggestion(this)">On dormim?</button>
-        <button class="sug-btn" onclick="askSuggestion(this)">Quants Michelin té?</button>
+        <button class="sug-btn" onclick="askSuggestion(this)">És un objecte?</button>
+        <button class="sug-btn" onclick="askSuggestion(this)">És un cap de setmana?</button>
+        <button class="sug-btn" onclick="askSuggestion(this)">Hi anem junts?</button>
+        <button class="sug-btn" onclick="askSuggestion(this)">És un dinar?</button>
+        <button class="sug-btn" onclick="askSuggestion(this)">Ens quedem a dormir?</button>
+        <button class="sug-btn" onclick="askSuggestion(this)">Hi hem estat mai?</button>
       </div>
 
       <div class="reveal-bar">
@@ -346,105 +346,156 @@
 // Cada entrada té: keywords (paraules clau) i answer (resposta)
 // ============================================================
 const KB = [
+  // ── Tipus de regal ────────────────────────────────────────
   {
-    keywords: ["regal","sorpresa","que","que es","que tinc","descobrir","saber"],
-    answer: "El teu regal és un cap de setmana especial a l'Empordà! Inclou un dinar en un restaurant de 2 estrelles Michelin, una nit d'hotel i una activitat de birding als Aiguamolls. 🌟 Pregunta'm pels detalls!",
+    keywords: ["es un objecte","és un objecte","objecte","cosa","regal fisic","regal físic"],
+    answer: "No és un objecte! És una experiència 🎭",
   },
   {
-    keywords: ["restaurant","on dinem","on mengem","dinar","sopar","menjar"],
-    answer: "Aneu a dinar al restaurant Bo.TiC, a Corçà (Baix Empordà). És un dels restaurants més exclusius de Catalunya, amb 2 estrelles Michelin! 🍽️ La reserva és per l'11 d'abril.",
+    keywords: ["es una activitat","és una activitat","activitat","experiencia","experiència"],
+    answer: "Sí! Dues activitats, de fet... 👀",
   },
   {
-    keywords: ["bo.tic","botic","bo tic","corça","corca"],
-    answer: "Bo.TiC és un restaurant d'alta cuina catalana situat a Corçà, al Baix Empordà. Té 2 estrelles Michelin i és conegut per la seva cuina creativa i arrelada al territori. Un lloc molt especial! ⭐⭐",
+    keywords: ["es un viatge","és un viatge","viatge","escapada","sortida"],
+    answer: "Una escapada de cap de setmana! 🌿 Curta però molt especial.",
   },
   {
-    keywords: ["michelin","estrelles","estrella","quantes","quants","premis"],
-    answer: "Bo.TiC té 2 estrelles Michelin! ⭐⭐ Això el situa entre els millors restaurants d'Espanya. Pocs restaurants de Catalunya en tenen tantes. Un lloc realment exclusiu!",
+    keywords: ["es un cap de setmana","és un cap de setmana","cap de setmana","weekend","fi de setmana"],
+    answer: "Sí! Dissabte i diumenge 🗓️ Dos dies plens de sorpreses.",
   },
   {
-    keywords: ["quan","data","dia","dies","quin dia","abril"],
-    answer: "El dinar a Bo.TiC és el divendres 11 d'abril 🍽️. La nit la passeu a l'hotel i el dissabte 12 d'abril feu l'activitat de birding als Aiguamolls. Un cap de setmana complet! 🗓️",
+    keywords: ["es lluny","és lluny","lluny","aprop","a prop","prop","quant temps","quant triguem","distancia","distància"],
+    answer: "Uns 90 minuts de Barcelona en cotxe 🚗 Prou lluny per desconnectar!",
   },
   {
-    keywords: ["activitat","que fem","activitat","programa","dissabte"],
-    answer: "El dissabte 12 d'abril teniu una activitat que es diu 'ornitorepte' 🦅 — és una sortida de birding (observació d'aus) al Parc Natural dels Aiguamolls de l'Empordà. Una experiència increïble per veure aus en llibertat!",
+    keywords: ["hi hem estat","hi hem anat","ja hi hem","coneixem","l'hem vist","l'hem visitat"],
+    answer: "Al restaurant, no hi heu estat mai! 🙅 Als Aiguamolls... potser? 😏",
   },
   {
-    keywords: ["ornitorepte","birding","aus","ocells","observacio","observació","parc"],
-    answer: "L'ornitorepte és una activitat de birding — observació d'aus en el seu hàbitat natural 🦢🦅. Es fa als Aiguamolls de l'Empordà, un dels parcs naturals més importants de Catalunya per a les aus. Hi ha espècies molt rares!",
+    keywords: ["hi anem junts","anem junts","els dos","sola","amb qui","acompanyada"],
+    answer: "Els dos junts! 🥂 Cap de setmana de parella.",
+  },
+  // ── El dinar ──────────────────────────────────────────────
+  {
+    keywords: ["mengem fora","sortim a menjar","anem a menjar","sopem","dinem","es un dinar","és un dinar","dinar"],
+    answer: "Sí! ✅ Hi ha un dinar. I no un dinar qualsevol... 👀",
   },
   {
-    keywords: ["aiguamolls","aiguamoll","emporda","empordà","parc natural","natura"],
-    answer: "Els Aiguamolls de l'Empordà és un Parc Natural a l'Alt Empordà, a prop de Castelló d'Empúries. És un dels principals espais per a la observació d'aus migratòries de la Mediterrània. Hi viuen cigonyes, flamencs, agrons i moltes espècies més! 🌿🦩",
+    keywords: ["en un restaurant","a un restaurant","restaurant","lloc per menjar"],
+    answer: "Sí! 🍽️ En un restaurant molt, molt especial...",
   },
   {
-    keywords: ["hotel","dormir","allotjament","nit","on dormim","quedem"],
-    answer: "Podeu triar entre 4 allotjaments fantàstics a la zona dels Aiguamolls: Mas del Mar, Hotel El Molí, Can Gusó i Hotel Canet. Tots estan a l'Alt Empordà, a prop de l'activitat de birding. Tu tries el que més t'agradi! 🏨",
+    keywords: ["es car","és car","es bo","és bo","exclusiu","luxe","famós","famous","conegut"],
+    answer: "Diguem que no és el lloc per mirar els preus del menú 😄 Molt especial, sí.",
   },
   {
-    keywords: ["mas del mar","masdelmar","mas mar"],
-    answer: "Mas del Mar és una masia del segle XVII convertida en hotel boutique, a Sant Pere Pescador. Està a 200 metres de la platja, té jardins preciosos, piscina i és perfecta per observar aus (el Parc Natural és just al costat). Lema: 'Nature. Love. Forever' 🌿🌊",
+    keywords: ["es famós","és famós","premiat","premis","guardons","reconegut"],
+    answer: "Bastant conegut en el món gastronòmic, sí... 🏆",
   },
   {
-    keywords: ["hotel el moli","el moli","moli","molí","el molí"],
-    answer: "Hotel El Molí és un hotel familiar a Sant Pere Pescador, en una finca de gairebé 20.000 m² amb bosc de pins i jardins. Vora el riu Fluvià i els Aiguamolls. Té piscina, pistes de tenis i habitacions molt confortables. 🌲",
+    keywords: ["te estrelles","té estrelles","estrella michelin","estrelles michelin","michelin","guia michelin"],
+    answer: "⭐⭐ Dues estrelles Michelin! Encertada!",
   },
   {
-    keywords: ["can guso","canguso","can gusó","guso","gusó","agroturisme","rural","masia"],
-    answer: "Can Gusó és un agroturisme del segle XVII a Castelló d'Empúries, a 10 minuts de la platja. Entorn rural molt tranquil, enmig de l'Alt Empordà, a prop del Parc Natural. Ideal si voleu una experiència autèntica i desconnectada. 🌾",
+    keywords: ["quantes estrelles","una estrella","dues estrelles","tres estrelles"],
+    answer: "Dues! ⭐⭐ Dels pocs restaurants de Catalunya amb dues estrelles Michelin.",
+  },
+  {
+    keywords: ["com es diu","el nom","quin nom","bo.tic","botic","bo tic"],
+    answer: "Es diu Bo.TiC! 🎯 A Corçà, al Baix Empordà.",
+  },
+  {
+    keywords: ["tipus de cuina","cuina catalana","cuina","que menjarem","que es menja","plats","menu","menú","que serveixen"],
+    answer: "Alta cuina catalana creativa 🌿 Menú degustació amb producte de proximitat. Una experiència per als sentits!",
+  },
+  // ── On és ─────────────────────────────────────────────────
+  {
+    keywords: ["es a barcelona","és a barcelona","barcelona","bcn","a la ciutat"],
+    answer: "No... pensa en camps, natura i mar 🌾 Fora de Barcelona!",
+  },
+  {
+    keywords: ["es a girona","és a girona","girona","costa brava","emporda","empordà","baix emporda","comarques gironines"],
+    answer: "🔥 Molt calent! Sí, és a Girona. A l'Empordà!",
+  },
+  {
+    keywords: ["corca","corça","baix emporda","baix empordà"],
+    answer: "🎯 Exacte! Corçà, al Baix Empordà. Ja quasi ho tens!",
+  },
+  // ── Quan ──────────────────────────────────────────────────
+  {
+    keywords: ["quan","quin dia","quina data","data","dia","mes","abril","quin mes","quan es","quan és"],
+    answer: "El dissabte 11 d'abril 📅 I el diumenge ja saps que fem l'ornitorepte 😉",
+  },
+  {
+    keywords: ["aviat","proxim","pròxim","properament","aquest cap","aquest mes"],
+    answer: "Aviat! El cap de setmana de l'11 i 12 d'abril 🗓️",
+  },
+  // ── La nit ────────────────────────────────────────────────
+  {
+    keywords: ["dormim","dormir","quedem a dormir","quedar a dormir","pernocta","nit fora"],
+    answer: "Sí! 🌙 Una nit d'hotel inclosa al regal!",
+  },
+  {
+    keywords: ["on dormim","on ens quedem","quin hotel","tipus hotel","allotjament"],
+    answer: "Podeu triar entre 4 allotjaments a l'Alt Empordà 🏨 — masia del s.XVII, hotel familiar, agroturisme... Tu tries!",
+  },
+  {
+    keywords: ["es a prop del mar","prop del mar","platja","playa","mar","bany"],
+    answer: "Dos dels hotels estan a 200 metres de la platja! 🌊 Combinació perfecta.",
+  },
+  {
+    keywords: ["es una masia","es rural","masia","rural","camp","agroturisme"],
+    answer: "Hi ha opcions rurals molt boniques! Una masia del s.XVII i un agroturisme, tots dos entre camps i natura 🌾",
+  },
+  {
+    keywords: ["mas del mar","masdelmar"],
+    answer: "Mas del Mar: masia del s.XVII a Sant Pere Pescador, a 200 m de la platja i al costat dels Aiguamolls. Jardins, piscina, molta natura. 🌿🌊",
+  },
+  {
+    keywords: ["hotel el moli","el moli","molí","el molí"],
+    answer: "Hotel El Molí: hotel familiar a Sant Pere Pescador, vora el riu Fluvià. Finca de 20.000 m² amb bosc de pins i piscina. 🌲",
+  },
+  {
+    keywords: ["can guso","can gusó","guso","gusó"],
+    answer: "Can Gusó: agroturisme del s.XVII a Castelló d'Empúries. Rural, tranquil i autèntic, a 10 min de la platja. 🌾",
   },
   {
     keywords: ["hotel canet","canet"],
-    answer: "Hotel Canet és un hotel a la Costa Brava, ben situat per a visitar els Aiguamolls de l'Empordà i la zona. Una opció còmoda i ben connectada amb la resta d'activitats del cap de setmana. 🏖️",
+    answer: "Hotel Canet: a la Costa Brava, ben situat prop dels Aiguamolls. Còmode i ben connectat! 🏖️",
+  },
+  // ── Context ornitorepte ───────────────────────────────────
+  {
+    keywords: ["ornitorepte","aiguamolls","aiguamoll","birding","aus","ocells"],
+    answer: "L'ornitorepte del diumenge ja el saps 😄 La sorpresa és el dissabte: el dinar i la nit! 🍽️🌙",
   },
   {
-    keywords: ["sant pere pescador","sant pere","pescador"],
-    answer: "Sant Pere Pescador és un poble de l'Alt Empordà, al costat dels Aiguamolls i la platja. És conegut pel kitesurf i el windsurf, i per la seva proximitat al Parc Natural. Allà hi ha el Mas del Mar i l'Hotel El Molí! 🏄",
+    keywords: ["te a veure amb ornitorepte","per l'ornitorepte","zona ornitorepte"],
+    answer: "Exacte! L'hotel és a la zona dels Aiguamolls, perfecte per tenir-ho tot a prop el diumenge 😉",
+  },
+  // ── Reaccions ─────────────────────────────────────────────
+  {
+    keywords: ["gracies","gràcies","que maco","que bonic","alucino","increible","increïble","emocionada","genial","wow","xulo","flipant"],
+    answer: "Et mereixes el millor, Marga! 😊❤️ Ara clica el botó per triar l'hotel!",
   },
   {
-    keywords: ["castello","castelló","castelló d'empúries","empuries"],
-    answer: "Castelló d'Empúries és un municipi medieval preciós de l'Alt Empordà. Allà hi ha Can Gusó, l'agroturisme. La vila medieval, els canals i la proximitat als Aiguamolls el fan un lloc molt especial. 🏰",
+    keywords: ["qui","d'en jordi","jordi","qui ho ha fet"],
+    answer: "D'en Jordi! Que t'estima molt i vol que aquest aniversari sigui inoblidable ❤️",
   },
   {
-    keywords: ["platja","playa","mar","bany","nadar","beach"],
-    answer: "Sí! La zona de Sant Pere Pescador i l'Alt Empordà té platges de sorra fina increïbles. El Mas del Mar és a 200 metres de la platja. Podeu combinar l'activitat de birding amb un bany si el temps acompanya 🌊☀️",
+    keywords: ["car","preu","quant costa","quant val","diners","euro"],
+    answer: "Eh eh eh 😄 Millor no preguntar. El que importa és que ho gaudeixis! 🥂",
   },
   {
-    keywords: ["quants","quant","cost","preu","car","barat","diners"],
-    answer: "Millor no preguntar per l'econòmia del regal... 😄 El que importa és que ho gaudeixes! Sàpigues que Bo.TiC és un restaurant molt exclusiu i que tot ha estat escollit amb molt de gust per a tu. 🥂",
+    keywords: ["vestir","roba","elegant","que porto","que em poso","com vaig"],
+    answer: "Pel dinar: elegant-casual 👗✨ Per l'ornitorepte: còmode i amb calçat de camp 🥾",
   },
   {
-    keywords: ["qui","qui ho","qui ha","quí","jordi"],
-    answer: "El regal és d'en Jordi, que t'estima molt i ha volgut fer d'aquest aniversari un cap de setmana inoblidable! ❤️",
+    keywords: ["aniversari","cumpleanos","cumpleaños","anys","es per aniversari","és per aniversari"],
+    answer: "Sí! Feliç aniversari, Marga! 🎂 Que el gaudeixis molt!",
   },
   {
-    keywords: ["come","vestir","roba","elegant","casual"],
-    answer: "Per al dinar a Bo.TiC, et recomano anar elegant-casual — no cal esmòquing, però sí una mica d'estil, que és un restaurant de 2 estrelles Michelin! 👗✨ Per al birding del dia següent, còmode i amb calçat adequat per al camp. 🥾",
-  },
-  {
-    keywords: ["gràcies","gracies","que maco","que bonic","increïble","increible","emocionada","content","contenta"],
-    answer: "De res, Marga! ❤️ Et mereixes el millor. Ara, segueix preguntant o clica 'Ja sé el regal!' per triar l'hotel que més t'agradi! 🏨",
-  },
-  {
-    keywords: ["flamencs","flamenc","cigonyes","cigunya","agrons","agro","aus","ocells","quines aus"],
-    answer: "Als Aiguamolls hi podeu veure cigonyes blanques 🦢, flamencs rosats 🦩, agrons blaus, ànecs, gavines i moltes espècies de limícoles i aus migratòries. Depenent de l'època, hi ha aus molt rares. L'11 d'abril és una data excel·lent per al pas migratori! 🐦",
-  },
-  {
-    keywords: ["menú","plats","cuina","gastronomia","que menjarem","que es menja"],
-    answer: "Bo.TiC ofereix menús degustació d'alta cuina catalana creativa. Els plats canvien segons temporada i producte de proximitat. Podeu esperar presentacions molt elaborades, sabors intensos i producte local de primera qualitat. Una experiència gastronòmica única! 🍷✨",
-  },
-  {
-    keywords: ["vi","vins","maridatge","beure","alcohol","cava","champagne"],
-    answer: "Bo.TiC té una carta de vins excel·lent, amb molt bons vins de l'Empordà i de tota Catalunya. Podeu demanar maridatge amb el menú per viure l'experiència completa. 🍷",
-  },
-  {
-    keywords: ["com arribar","arribar","cotxe","tren","transport","aparcament"],
-    answer: "La zona de l'Empordà és fàcil d'arribar en cotxe des de Barcelona per l'AP-7. Corçà (Bo.TiC) és a uns 130 km de Barcelona, uns 90 min. Sant Pere Pescador (hotels) és a uns 20 min de Corçà. Us convindrà tenir cotxe per al cap de setmana! 🚗",
-  },
-  {
-    keywords: ["temps","clima","fred","calor","abril","pluja"],
-    answer: "L'abril a l'Empordà sol ser molt agradable — entre 15-20°C, amb dies assolellats. Pot fer algo de vent de tramuntana, però és l'època ideal per al birding! Porteu una jaqueta lleugera per si de cas. 🌤️",
+    keywords: ["temps","clima","fred","calor","pluja"],
+    answer: "L'abril a l'Empordà sol ser molt agradable, entre 15-20°C. Pot fer tramuntana, porta una jaqueta! 🌤️",
   },
 ];
 
@@ -554,7 +605,7 @@ function goTo(id) {
   window.scrollTo({ top: 0, behavior: "smooth" });
   if (id === "screen-chat" && !chatReady) {
     chatReady = true;
-    setTimeout(() => addMsg("bot", "Hola Marga! 🎂 Feliç aniversari! Soc la guia del teu regal secret. Pregunta'm tot el que vulguis saber... però sense revelar-ho tot de cop! 😄🔮"), 300);
+    setTimeout(() => addMsg("bot", "Hola Marga! 🎂 Feliç aniversari! Soc la guia del teu regal secret. Fes-me preguntes per anar endevinant-lo... però ves amb compte, no t'ho diré tot de cop! 😄🔮"), 300);
   }
 }
 
