@@ -393,20 +393,20 @@ const triaRestaurant = {
 // Camí compartit un cop sabem que és restaurant amb Michelin
 function caminaFinal() {
   return {
-    q: 'Creus que el dinar serà aquest abril?',
-    hint: 'Potser és més aviat del que creus...',
-    yes: {
-      q: 'Creus que dinarem el mateix cap de setmana que anem a veure l\'ornitorepte?',
-      hint: 'Pensa en el cap de setmana que ja tenim planejat...',
-      yes: {
+    q: 'Creus que és un sopar?',
+    hint: 'Pensa bé en el moment del dia...',
+    yes: WRONG,
+    no: {
+      q: 'Creus que elegireu vosaltres els plats?',
+      hint: 'O potser el xef ja ho té tot decidit...',
+      yes: WRONG,
+      no: {
         q: 'Creus que dinarem el dissabte, el dia abans de l\'ornitorepte?',
         hint: 'Dissabte de gastronomia, diumenge de natura!',
         yes: triaRestaurant,
         no: WRONG
-      },
-      no: WRONG
-    },
-    no: WRONG
+      }
+    }
   };
 }
 
@@ -421,10 +421,10 @@ function caminaRestaurantMichelin() {
 
 function caminaRestaurantCatalunya() {
   return {
-    q: 'Creus que el restaurant és a Catalunya?',
-    hint: 'Potser més a prop del que creus...',
-    yes: caminaRestaurantMichelin(),
-    no: WRONG
+    q: 'Creus que el restaurant és en una capital de comarca?',
+    hint: 'Una capital de comarca, o potser és en un poble més petit?',
+    yes: WRONG,
+    no: caminaRestaurantMichelin()
   };
 }
 
