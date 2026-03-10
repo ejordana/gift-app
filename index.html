@@ -10,7 +10,7 @@
       --bg: #0d0d1a; --card: #15152a; --border: #2a2a4a;
       --accent: #c084fc; --accent2: #f472b6; --gold: #fbbf24;
       --text: #e2e8f0; --muted: #94a3b8; --success: #34d399;
-      --error: #f87171; --radius: 1rem;
+      --radius: 1rem;
     }
     body {
       min-height: 100vh; background: var(--bg); color: var(--text);
@@ -21,99 +21,129 @@
     body::before {
       content: ''; position: fixed; inset: 0;
       background-image:
-        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 20%, rgba(255,255,255,.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.2) 0%, transparent 100%);
+        radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,.45) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 65%, rgba(255,255,255,.3)  0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,.4)  0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 80%, rgba(255,255,255,.2)  0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,.25) 0%, transparent 100%);
       pointer-events: none;
     }
     #app { width: 100%; max-width: 560px; }
+
     .screen { display: none; animation: fadeIn .5s ease; }
     .screen.active { display: block; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
     .card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 2rem;
-      box-shadow: 0 0 40px rgba(192,132,252,.1);
+      box-shadow: 0 0 50px rgba(192,132,252,.12);
     }
-    .progress-wrap { margin-bottom: 1.5rem; }
-    .progress-label {
-      display: flex; justify-content: space-between;
-      font-size: .75rem; color: var(--muted); margin-bottom: .4rem;
-    }
-    .progress-track { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 99px; transition: width .5s ease;
-    }
+
     h1 {
       font-size: 1.6rem; font-weight: 700;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; margin-bottom: .5rem;
+      background-clip: text; margin-bottom: .4rem;
     }
-    h2 { font-size: 1.3rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; }
-    p { color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
-    .emoji-big { font-size: 3rem; display: block; text-align: center; margin-bottom: 1rem; }
-    .input-wrap { margin: 1.2rem 0; }
-    label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: .4rem; }
-    input[type="text"] {
-      width: 100%; padding: .75rem 1rem; background: var(--bg);
-      border: 1.5px solid var(--border); border-radius: .6rem;
-      color: var(--text); font-size: 1rem; outline: none; transition: border-color .2s;
-    }
-    input[type="text"]:focus { border-color: var(--accent); }
-    input[type="text"].error { border-color: var(--error); animation: shake .3s ease; }
-    input[type="text"].success { border-color: var(--success); }
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
-    }
-    .hint { font-size: .78rem; color: var(--muted); margin-top: .3rem; min-height: 1em; }
-    .hint.err { color: var(--error); }
-    .hint.ok  { color: var(--success); }
+    h2 { font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; }
+    p { color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+    .emoji-big { font-size: 3.2rem; display: block; text-align: center; margin-bottom: 1rem; }
+
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: .5rem; width: 100%; padding: .85rem 1.5rem; border: none;
-      border-radius: .7rem; font-size: 1rem; font-weight: 600;
-      cursor: pointer; transition: transform .15s, box-shadow .15s;
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      width: 100%; padding: .85rem 1.5rem; border: none; border-radius: .7rem;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: transform .15s, box-shadow .15s, opacity .2s;
     }
     .btn:active { transform: scale(.97); }
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff; box-shadow: 0 4px 20px rgba(192,132,252,.35);
     }
-    .btn-primary:hover { box-shadow: 0 6px 28px rgba(192,132,252,.5); }
-    .btn-secondary {
-      background: transparent; border: 1.5px solid var(--border);
-      color: var(--muted); margin-top: .6rem;
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(192,132,252,.55); }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Clue map */
+    .clue-map {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 0; margin: 1.8rem 0;
     }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-    .reveal-badge {
-      background: linear-gradient(135deg, #1a1a3a, #2a1a4a);
-      border: 1px solid var(--accent); border-radius: .8rem;
-      padding: 1rem 1.2rem; margin: 1rem 0;
-      display: flex; align-items: center; gap: .8rem;
-      animation: popIn .4s cubic-bezier(.34,1.56,.64,1);
+    .clue-node {
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      position: relative;
     }
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(.7); }
-      to   { opacity: 1; transform: scale(1); }
+    .clue-circle {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; border: 2px solid var(--border);
+      background: #1a1a3a; transition: all .3s; position: relative; z-index: 1;
     }
-    .reveal-badge .badge-icon { font-size: 1.8rem; }
-    .reveal-badge .badge-text { font-size: .9rem; color: var(--accent); font-weight: 600; }
-    .reveal-badge .badge-sub  { font-size: .8rem; color: var(--muted); }
-    .gifts-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
-    .gift-chip {
-      background: #1a1a3a; border: 1px solid var(--border);
-      border-radius: 99px; padding: .3rem .8rem; font-size: .8rem; color: var(--muted);
+    .clue-node.unlocked .clue-circle {
+      border-color: var(--accent); background: rgba(192,132,252,.15);
+      box-shadow: 0 0 16px rgba(192,132,252,.4); cursor: pointer;
     }
-    .gift-chip.unlocked { border-color: var(--accent); color: var(--accent); background: rgba(192,132,252,.1); }
+    .clue-node.unlocked .clue-circle:hover {
+      transform: scale(1.1); box-shadow: 0 0 24px rgba(192,132,252,.6);
+    }
+    .clue-node.done .clue-circle {
+      border-color: var(--success); background: rgba(52,211,153,.12);
+      box-shadow: 0 0 12px rgba(52,211,153,.25); cursor: pointer;
+    }
+    .clue-node.final-node .clue-circle { width: 64px; height: 64px; font-size: 1.7rem; }
+    .clue-node.final-node.unlocked .clue-circle {
+      border-color: var(--gold); background: rgba(251,191,36,.15);
+      box-shadow: 0 0 20px rgba(251,191,36,.45);
+      animation: pulse 1.5s infinite; cursor: pointer;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 20px rgba(251,191,36,.45); }
+      50%      { box-shadow: 0 0 36px rgba(251,191,36,.7); }
+    }
+    .clue-label {
+      font-size: .7rem; color: var(--muted); text-align: center;
+      max-width: 60px; line-height: 1.2;
+    }
+    .clue-node.unlocked .clue-label,
+    .clue-node.done .clue-label { color: var(--text); }
+    .clue-connector {
+      width: 32px; height: 2px; background: var(--border);
+      margin-bottom: 20px; flex-shrink: 0; transition: background .4s;
+    }
+    .clue-connector.active { background: var(--accent); }
+
+    /* Clue popup */
+    .clue-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.7); z-index: 200;
+      align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .clue-overlay.open { display: flex; animation: fadeIn .25s ease; }
+    .clue-popup {
+      background: var(--card); border: 1px solid var(--accent);
+      border-radius: var(--radius); padding: 2rem; max-width: 420px; width: 100%;
+      box-shadow: 0 0 60px rgba(192,132,252,.3); position: relative;
+    }
+    .clue-popup .clue-num {
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: .3rem;
+    }
+    .clue-popup .clue-body {
+      font-size: 1.05rem; color: var(--text); line-height: 1.7; margin-bottom: 1.5rem;
+    }
+    .clue-popup .clue-emoji { font-size: 2.5rem; display: block; text-align: center; margin-bottom: 1rem; }
+    .btn-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.3rem; cursor: pointer; padding: .2rem .5rem;
+      border-radius: .4rem; transition: color .2s;
+    }
+    .btn-close:hover { color: var(--text); }
+
+    /* Hotel cards */
     .hotels-grid { display: grid; gap: .8rem; margin-top: 1rem; }
     .hotel-card {
       background: var(--bg); border: 1.5px solid var(--border);
@@ -123,33 +153,46 @@
     }
     .hotel-card:hover { border-color: var(--accent); background: rgba(192,132,252,.05); transform: translateY(-2px); }
     .hotel-card.selected { border-color: var(--gold); background: rgba(251,191,36,.07); }
-    .hotel-card .hotel-emoji { font-size: 1.8rem; }
+    .hotel-card .hotel-emoji { font-size: 1.8rem; flex-shrink: 0; }
     .hotel-card .hotel-name { font-weight: 600; color: var(--text); font-size: .95rem; }
-    .hotel-card .hotel-desc { font-size: .8rem; color: var(--muted); margin-top: .1rem; }
-    #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
-    .final-gift { text-align: center; padding: 1rem 0; }
-    .final-gift h1 { font-size: 2rem; margin-bottom: .5rem; }
-    .gift-items { display: grid; gap: .8rem; margin: 1.5rem 0; text-align: left; }
+    .hotel-card .hotel-desc { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+
+    /* Final */
+    .gift-items { display: grid; gap: .8rem; margin: 1.4rem 0; }
     .gift-item {
       background: var(--bg); border: 1px solid var(--border);
       border-radius: .8rem; padding: 1rem 1.2rem;
       display: flex; align-items: center; gap: 1rem;
     }
-    .gift-item .gi-icon { font-size: 2rem; }
+    .gift-item .gi-icon { font-size: 2rem; flex-shrink: 0; }
     .gift-item .gi-title { font-weight: 700; color: var(--text); }
     .gift-item .gi-sub { font-size: .85rem; color: var(--muted); }
     .selected-hotel-tag {
       display: inline-block; background: rgba(251,191,36,.15);
       border: 1px solid var(--gold); color: var(--gold);
-      border-radius: 99px; padding: .2rem .7rem; font-size: .8rem; margin-top: .4rem;
+      border-radius: 99px; padding: .2rem .8rem; font-size: .8rem; margin-top: .4rem;
     }
     .divider { height: 1px; background: var(--border); margin: 1.2rem 0; }
     .signature { text-align: center; font-size: .8rem; color: var(--muted); margin-top: 1.5rem; }
     .signature span { color: var(--accent2); }
+    #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
   </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
+
+<!-- Popup -->
+<div class="clue-overlay" id="clue-overlay">
+  <div class="clue-popup">
+    <button class="btn-close" onclick="closeClue()">✕</button>
+    <span class="clue-emoji" id="popup-emoji"></span>
+    <div class="clue-num" id="popup-num"></div>
+    <h2 id="popup-title"></h2>
+    <div class="clue-body" id="popup-body"></div>
+    <button class="btn btn-primary" id="popup-btn" onclick="markDone()">Entès! Segueix 👉</button>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- SCREEN 0: Benvinguda -->
@@ -158,132 +201,47 @@
       <span class="emoji-big">🎁</span>
       <h1>Tens un regal especial</h1>
       <p>Hola, <strong>[NOM_PERSONA]</strong>! T'he preparat alguna cosa molt especial.
-      Però primer hauràs de demostrar que ens coneixes prou bé...</p>
-      <p>Respon <strong>3 preguntes</strong> per desbloquejar el teu regal.</p>
-      <button class="btn btn-primary" onclick="goTo('screen-q1')">Comencem! 🚀</button>
+      Segueix les pistes per descobrir-ho...</p>
+      <button class="btn btn-primary" onclick="goTo('screen-map')">Descobrir el regal 🗺️</button>
     </div>
     <p class="signature">Fet amb <span>♥</span> per <strong>[EL_TEU_NOM]</strong></p>
   </div>
 
-  <!-- SCREEN 1: Pregunta 1 -->
-  <div class="screen" id="screen-q1">
+  <!-- SCREEN 1: Mapa -->
+  <div class="screen" id="screen-map">
     <div class="card">
-      <div class="progress-wrap">
-        <div class="progress-label"><span>Pregunta 1 de 3</span><span>33%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:33%"></div></div>
-      </div>
-      <div class="gifts-row">
-        <div class="gift-chip unlocked">✅ Comença!</div>
-        <div class="gift-chip">🔒 Pista 1</div>
-        <div class="gift-chip">🔒 Pista 2</div>
-        <div class="gift-chip">🔒 Regal!</div>
-      </div>
-      <h2>Pregunta 1 🗺️</h2>
-      <p>[PREGUNTA_1]</p>
-      <div class="input-wrap">
-        <label>La teva resposta</label>
-        <input type="text" id="ans1" placeholder="Escriu aquí..." autocomplete="off" />
-        <div class="hint" id="hint1"></div>
-      </div>
-      <div id="reveal1" style="display:none">
-        <div class="reveal-badge">
-          <span class="badge-icon">🍽️</span>
-          <div>
-            <div class="badge-text">Primera pista desblocada!</div>
-            <div class="badge-sub">El teu regal inclou un dinar especial...</div>
-          </div>
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="checkAnswer(1)">Comprovar resposta ✓</button>
-      <button class="btn btn-secondary" onclick="showHint(1)">Necessito una pista 💡</button>
+      <h1>Mapa del regal</h1>
+      <p>Clica cada pista per descobrir-la. Cada una t'acosta més al regal!</p>
+      <div class="clue-map" id="clue-map"></div>
     </div>
   </div>
 
-  <!-- SCREEN 2: Pregunta 2 -->
-  <div class="screen" id="screen-q2">
-    <div class="card">
-      <div class="progress-wrap">
-        <div class="progress-label"><span>Pregunta 2 de 3</span><span>66%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:66%"></div></div>
-      </div>
-      <div class="gifts-row">
-        <div class="gift-chip unlocked">✅ Comença!</div>
-        <div class="gift-chip unlocked">✅ Pista 1</div>
-        <div class="gift-chip">🔒 Pista 2</div>
-        <div class="gift-chip">🔒 Regal!</div>
-      </div>
-      <h2>Pregunta 2 🗓️</h2>
-      <p>[PREGUNTA_2]</p>
-      <div class="input-wrap">
-        <label>La teva resposta</label>
-        <input type="text" id="ans2" placeholder="Escriu aquí..." autocomplete="off" />
-        <div class="hint" id="hint2"></div>
-      </div>
-      <div id="reveal2" style="display:none">
-        <div class="reveal-badge">
-          <span class="badge-icon">🌙</span>
-          <div>
-            <div class="badge-text">Segona pista desblocada!</div>
-            <div class="badge-sub">...i també inclou una nit especial!</div>
-          </div>
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="checkAnswer(2)">Comprovar resposta ✓</button>
-      <button class="btn btn-secondary" onclick="showHint(2)">Necessito una pista 💡</button>
-    </div>
-  </div>
-
-  <!-- SCREEN 3: Pregunta 3 -->
-  <div class="screen" id="screen-q3">
-    <div class="card">
-      <div class="progress-wrap">
-        <div class="progress-label"><span>Última pregunta!</span><span>99%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:99%"></div></div>
-      </div>
-      <div class="gifts-row">
-        <div class="gift-chip unlocked">✅ Comença!</div>
-        <div class="gift-chip unlocked">✅ Pista 1</div>
-        <div class="gift-chip unlocked">✅ Pista 2</div>
-        <div class="gift-chip">🔒 Regal!</div>
-      </div>
-      <h2>Última pregunta 🏆</h2>
-      <p>[PREGUNTA_3]</p>
-      <div class="input-wrap">
-        <label>La teva resposta</label>
-        <input type="text" id="ans3" placeholder="Escriu aquí..." autocomplete="off" />
-        <div class="hint" id="hint3"></div>
-      </div>
-      <button class="btn btn-primary" onclick="checkAnswer(3)">Obrir el regal! 🎁</button>
-      <button class="btn btn-secondary" onclick="showHint(3)">Necessito una pista 💡</button>
-    </div>
-  </div>
-
-  <!-- SCREEN 4: Tria hotel -->
+  <!-- SCREEN 2: Hotel -->
   <div class="screen" id="screen-hotel">
     <div class="card">
       <span class="emoji-big">🏨</span>
       <h1>Tria el teu hotel!</h1>
-      <p>Ara que has superat el repte, tens una nit d'hotel inclosa. Quin prefereixes?</p>
+      <p>Part del regal és una nit d'hotel. Quin prefereixes?</p>
       <div class="hotels-grid">
         <div class="hotel-card" onclick="selectHotel(this, '[HOTEL_1]')">
           <span class="hotel-emoji">🏰</span>
           <div>
             <div class="hotel-name">[HOTEL_1]</div>
-            <div class="hotel-desc">[Descripció hotel 1 — ubicació, estil...]</div>
+            <div class="hotel-desc">[Descripció hotel 1]</div>
           </div>
         </div>
         <div class="hotel-card" onclick="selectHotel(this, '[HOTEL_2]')">
           <span class="hotel-emoji">🌅</span>
           <div>
             <div class="hotel-name">[HOTEL_2]</div>
-            <div class="hotel-desc">[Descripció hotel 2 — ubicació, estil...]</div>
+            <div class="hotel-desc">[Descripció hotel 2]</div>
           </div>
         </div>
         <div class="hotel-card" onclick="selectHotel(this, '[HOTEL_3]')">
           <span class="hotel-emoji">🌿</span>
           <div>
             <div class="hotel-name">[HOTEL_3]</div>
-            <div class="hotel-desc">[Descripció hotel 3 — ubicació, estil...]</div>
+            <div class="hotel-desc">[Descripció hotel 3]</div>
           </div>
         </div>
       </div>
@@ -294,13 +252,13 @@
     </div>
   </div>
 
-  <!-- SCREEN 5: Final -->
+  <!-- SCREEN 3: Final -->
   <div class="screen" id="screen-final">
-    <div class="card final-gift">
+    <div class="card" style="text-align:center">
       <span class="emoji-big" style="font-size:4rem">🎉</span>
       <h1>El teu regal!</h1>
-      <p>Felicitats, <strong>[NOM_PERSONA]</strong>! Has guanyat:</p>
-      <div class="gift-items">
+      <p>Felicitats, <strong>[NOM_PERSONA]</strong>! Aquí tens tot:</p>
+      <div class="gift-items" style="text-align:left">
         <div class="gift-item">
           <span class="gi-icon">🍽️</span>
           <div>
@@ -319,9 +277,7 @@
       </div>
       <div class="divider"></div>
       <p style="font-size:.9rem">[MISSATGE_FINAL]</p>
-      <button class="btn btn-primary" style="margin-top:1rem" onclick="launchConfetti()">
-        Celebrar! 🎊
-      </button>
+      <button class="btn btn-primary" style="margin-top:1rem" onclick="launchConfetti()">Celebrar! 🎊</button>
     </div>
     <p class="signature">Fet amb <span>♥</span> per <strong>[EL_TEU_NOM]</strong></p>
   </div>
@@ -329,29 +285,108 @@
 </div>
 
 <script>
-// =================================================
+// =======================================================
 // CONFIGURACIÓ — Edita aquí les teves dades
-// =================================================
-const CONFIG = {
-  answers: [
-    ["[RESPOSTA_1]"],   // pregunta 1 — pots posar variants: ["barcelona", "bcn"]
-    ["[RESPOSTA_2]"],   // pregunta 2
-    ["[RESPOSTA_3]"],   // pregunta 3
-  ],
-  hints: [
-    "[PISTA_1]",
-    "[PISTA_2]",
-    "[PISTA_3]",
-  ],
-};
-// =================================================
+// =======================================================
+const CLUES = [
+  {
+    emoji: "🍽️",
+    title: "Pista 1",
+    body: "[PISTA_1] — Ex: \"Inclou menjar... i no qualsevol menjar!\"",
+    label: "Pista 1",
+  },
+  {
+    emoji: "📍",
+    title: "Pista 2",
+    body: "[PISTA_2] — Ex: \"Penseu en un lloc especial per a vosaltres dos...\"",
+    label: "Pista 2",
+  },
+  {
+    emoji: "🌙",
+    title: "Pista 3",
+    body: "[PISTA_3] — Ex: \"I no és només un dia... és també una nit!\"",
+    label: "Pista 3",
+  },
+  {
+    emoji: "🎁",
+    title: "El regal!",
+    body: "Ja ho saps tot... o gairebé! Clica per descobrir el regal complet.",
+    label: "Regal!",
+    isFinal: true,
+  },
+];
+// =======================================================
 
+let currentClueIdx = null;
+let doneMask = [];
 let selectedHotel = null;
-let hintShown = [false, false, false];
 
-function normalize(str) {
-  return str.trim().toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function buildMap() {
+  const map = document.getElementById("clue-map");
+  map.innerHTML = "";
+  doneMask = new Array(CLUES.length).fill(false);
+
+  CLUES.forEach((clue, i) => {
+    if (i > 0) {
+      const conn = document.createElement("div");
+      conn.className = "clue-connector";
+      conn.id = "conn-" + i;
+      map.appendChild(conn);
+    }
+    const node = document.createElement("div");
+    node.className = "clue-node" + (clue.isFinal ? " final-node" : "");
+    node.id = "node-" + i;
+    node.innerHTML =
+      "<div class=\"clue-circle\">" + (i === 0 ? clue.emoji : "🔒") + "</div>" +
+      "<div class=\"clue-label\">" + clue.label + "</div>";
+    if (i === 0) {
+      node.classList.add("unlocked");
+      node.onclick = () => openClue(0);
+    }
+    map.appendChild(node);
+  });
+}
+
+function openClue(i) {
+  const clue = CLUES[i];
+  currentClueIdx = i;
+  document.getElementById("popup-emoji").textContent = clue.emoji;
+  document.getElementById("popup-num").textContent = clue.isFinal ? "Regal final" : "Pista " + (i + 1) + " de " + (CLUES.length - 1);
+  document.getElementById("popup-title").textContent = clue.title;
+  document.getElementById("popup-body").textContent = clue.body;
+  document.getElementById("popup-btn").textContent = clue.isFinal ? "Revelar el regal! 🎁" : "Entès! Segueix 👉";
+  document.getElementById("clue-overlay").classList.add("open");
+}
+
+function closeClue() {
+  document.getElementById("clue-overlay").classList.remove("open");
+}
+
+function markDone() {
+  const i = currentClueIdx;
+  doneMask[i] = true;
+  closeClue();
+
+  const node = document.getElementById("node-" + i);
+  node.classList.remove("unlocked");
+  node.classList.add("done");
+  node.querySelector(".clue-circle").textContent = "✅";
+  node.onclick = () => openClue(i);
+
+  if (CLUES[i].isFinal) {
+    goTo("screen-hotel");
+    return;
+  }
+
+  const next = i + 1;
+  if (next < CLUES.length) {
+    const nextNode = document.getElementById("node-" + next);
+    nextNode.classList.add("unlocked");
+    nextNode.querySelector(".clue-circle").textContent = CLUES[next].emoji;
+    nextNode.onclick = () => openClue(next);
+    const conn = document.getElementById("conn-" + next);
+    if (conn) conn.classList.add("active");
+  }
 }
 
 function goTo(id) {
@@ -359,60 +394,6 @@ function goTo(id) {
   document.getElementById(id).classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
-function checkAnswer(q) {
-  const input = document.getElementById("ans" + q);
-  const val   = normalize(input.value);
-  const valid = CONFIG.answers[q - 1].map(normalize);
-
-  if (!val) { setHint(q, "Escriu una resposta primer.", "err"); shake(input); return; }
-
-  if (valid.includes(val)) {
-    input.classList.remove("error");
-    input.classList.add("success");
-    setHint(q, "✓ Correcte!", "ok");
-    input.disabled = true;
-    if (q < 3) {
-      const rev = document.getElementById("reveal" + q);
-      if (rev) rev.style.display = "block";
-      setTimeout(() => goTo("screen-q" + (q + 1)), 1800);
-    } else {
-      setTimeout(() => goTo("screen-hotel"), 1200);
-    }
-  } else {
-    input.classList.add("error");
-    input.classList.remove("success");
-    setHint(q, "✗ No és correcte. Torna-ho a intentar!", "err");
-    shake(input);
-    setTimeout(() => input.classList.remove("error"), 600);
-  }
-}
-
-function setHint(q, msg, type) {
-  const el = document.getElementById("hint" + q);
-  el.textContent = msg;
-  el.className = "hint " + (type || "");
-}
-
-function showHint(q) {
-  if (hintShown[q - 1]) return;
-  hintShown[q - 1] = true;
-  setHint(q, "💡 " + CONFIG.hints[q - 1], "");
-}
-
-function shake(el) {
-  el.classList.remove("error");
-  void el.offsetWidth;
-  el.classList.add("error");
-}
-
-document.addEventListener("keydown", e => {
-  if (e.key !== "Enter") return;
-  ["screen-q1","screen-q2","screen-q3"].forEach((sid, i) => {
-    const s = document.getElementById(sid);
-    if (s && s.classList.contains("active")) checkAnswer(i + 1);
-  });
-});
 
 function selectHotel(el, name) {
   document.querySelectorAll(".hotel-card").forEach(c => c.classList.remove("selected"));
@@ -436,10 +417,10 @@ function launchConfetti() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const colors = ["#c084fc","#f472b6","#fbbf24","#34d399","#60a5fa","#fff"];
-  const pieces = Array.from({ length: 120 }, () => ({
+  const pieces = Array.from({ length: 140 }, () => ({
     x: Math.random() * canvas.width,
     y: -10 - Math.random() * 200,
-    r: 4 + Math.random() * 6,
+    r: 4 + Math.random() * 7,
     d: 2 + Math.random() * 3,
     color: colors[Math.floor(Math.random() * colors.length)],
     tilt: Math.random() * 10 - 5,
@@ -457,11 +438,13 @@ function launchConfetti() {
       ctx.fill(); ctx.restore();
     });
     frame++;
-    if (frame < 200) requestAnimationFrame(draw);
+    if (frame < 220) requestAnimationFrame(draw);
     else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   draw();
 }
+
+buildMap();
 </script>
 </body>
 </html>
