@@ -7,10 +7,10 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d0d1a; --card: #15152a; --border: #2a2a4a;
+      --bg: #0a0a18; --card: #13132a; --border: #252545;
       --accent: #c084fc; --accent2: #f472b6; --gold: #fbbf24;
       --text: #e2e8f0; --muted: #94a3b8; --success: #34d399;
-      --radius: 1rem;
+      --radius: 1.1rem;
     }
     body {
       min-height: 100vh; background: var(--bg); color: var(--text);
@@ -18,246 +18,297 @@
       display: flex; align-items: center; justify-content: center;
       padding: 1.5rem; overflow-x: hidden;
     }
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,.45) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 65%, rgba(255,255,255,.3)  0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,.4)  0%, transparent 100%),
-        radial-gradient(1px 1px at 35% 80%, rgba(255,255,255,.2)  0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,.25) 0%, transparent 100%);
-      pointer-events: none;
-    }
-    #app { width: 100%; max-width: 560px; }
 
-    .screen { display: none; animation: fadeIn .5s ease; }
-    .screen.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(18px); }
+    /* Stars */
+    .stars {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .star {
+      position: absolute; background: #fff; border-radius: 50%;
+      animation: twinkle var(--d) var(--delay) infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: .15; transform: scale(1); }
+      to   { opacity: .8;  transform: scale(1.4); }
+    }
+
+    #app { width: 100%; max-width: 520px; position: relative; z-index: 1; }
+
+    /* Screens */
+    .screen { display: none; }
+    .screen.active { display: block; animation: slideUp .5s cubic-bezier(.22,1,.36,1); }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* Card */
     .card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 2rem;
-      box-shadow: 0 0 50px rgba(192,132,252,.12);
+      box-shadow: 0 8px 60px rgba(192,132,252,.1);
     }
+
     h1 {
-      font-size: 1.6rem; font-weight: 700;
+      font-size: 1.65rem; font-weight: 700; line-height: 1.2;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; margin-bottom: .4rem;
+      background-clip: text; margin-bottom: .5rem;
     }
-    p { color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
-    .emoji-big { font-size: 3.2rem; display: block; text-align: center; margin-bottom: 1rem; }
+    h2 { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: .4rem; }
+    p  { color: var(--muted); line-height: 1.7; margin-bottom: 1rem; font-size: .95rem; }
+    .emoji-xl { font-size: 3.5rem; display: block; text-align: center; margin-bottom: 1.2rem; }
 
+    /* Button */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-      width: 100%; padding: .85rem 1.5rem; border: none; border-radius: .7rem;
+      width: 100%; padding: .9rem 1.5rem; border: none; border-radius: .75rem;
       font-size: 1rem; font-weight: 600; cursor: pointer;
-      transition: transform .15s, box-shadow .15s, opacity .2s;
+      transition: transform .15s, box-shadow .2s, opacity .2s;
     }
-    .btn:active { transform: scale(.97); }
+    .btn:active { transform: scale(.96); }
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff; box-shadow: 0 4px 20px rgba(192,132,252,.35);
+      color: #fff; box-shadow: 0 4px 24px rgba(192,132,252,.4);
     }
-    .btn-primary:hover { box-shadow: 0 6px 28px rgba(192,132,252,.55); }
-    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-primary:hover { box-shadow: 0 6px 32px rgba(192,132,252,.6); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .35; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-ghost {
+      background: transparent; border: 1.5px solid var(--border); color: var(--muted);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── Chat ── */
-    .chat-wrap {
-      display: flex; flex-direction: column; height: 100%;
+    /* ── Clue path ─────────────────────────────────── */
+    .clue-path {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; gap: 0; margin: 1.5rem 0 2rem;
     }
-    .chat-header {
-      display: flex; align-items: center; gap: .8rem;
-      padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;
+
+    .path-item {
+      display: flex; align-items: center; width: 100%; position: relative;
     }
-    .chat-avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    .path-item:nth-child(odd)  { flex-direction: row; }
+    .path-item:nth-child(even) { flex-direction: row-reverse; }
+
+    /* vertical connector */
+    .v-connector {
+      width: 2px; height: 32px; background: var(--border);
+      position: absolute; left: 50%; transform: translateX(-50%);
+      transition: background .5s;
+    }
+    .v-connector.done { background: var(--accent); }
+    /* position connectors between items */
+    .path-item + .v-connector { margin-top: -1px; }
+
+    .clue-btn {
+      flex: 1; display: flex; align-items: center; gap: .9rem;
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: .8rem; padding: .85rem 1rem; cursor: not-allowed;
+      transition: all .3s; position: relative; z-index: 1;
+      text-align: left;
+    }
+    .clue-btn.unlocked {
+      cursor: pointer; border-color: var(--accent);
+      background: rgba(192,132,252,.07);
+      box-shadow: 0 0 20px rgba(192,132,252,.2);
+    }
+    .clue-btn.unlocked:hover {
+      background: rgba(192,132,252,.13);
+      box-shadow: 0 0 30px rgba(192,132,252,.35);
+      transform: translateY(-2px);
+    }
+    .clue-btn.done {
+      cursor: pointer; border-color: var(--success);
+      background: rgba(52,211,153,.06);
+    }
+    .clue-btn.final-btn.unlocked {
+      border-color: var(--gold);
+      background: rgba(251,191,36,.08);
+      box-shadow: 0 0 24px rgba(251,191,36,.3);
+      animation: goldPulse 2s infinite;
+    }
+    @keyframes goldPulse {
+      0%,100% { box-shadow: 0 0 24px rgba(251,191,36,.3); }
+      50%      { box-shadow: 0 0 40px rgba(251,191,36,.55); }
+    }
+    .clue-icon {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; flex-shrink: 0;
+      font-size: 1.3rem; background: #1a1a3a; border: 1.5px solid var(--border);
+      transition: all .3s;
     }
-    .chat-avatar-info .name { font-weight: 600; color: var(--text); font-size: .95rem; }
-    .chat-avatar-info .status { font-size: .75rem; color: var(--success); }
+    .clue-btn.unlocked .clue-icon { border-color: var(--accent); background: rgba(192,132,252,.15); }
+    .clue-btn.done    .clue-icon { border-color: var(--success); background: rgba(52,211,153,.12); }
+    .clue-btn.final-btn.unlocked .clue-icon { border-color: var(--gold); background: rgba(251,191,36,.15); }
 
-    .messages {
-      flex: 1; overflow-y: auto; display: flex; flex-direction: column;
-      gap: .8rem; min-height: 320px; max-height: 400px;
-      padding-right: .3rem; margin-bottom: 1rem;
+    .clue-text .clue-tag {
+      font-size: .7rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: .1rem;
     }
-    .messages::-webkit-scrollbar { width: 4px; }
-    .messages::-webkit-scrollbar-track { background: transparent; }
-    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    .clue-btn.unlocked .clue-tag { color: var(--accent); }
+    .clue-btn.done    .clue-tag { color: var(--success); }
+    .clue-btn.final-btn.unlocked .clue-tag { color: var(--gold); }
+    .clue-text .clue-name { font-size: .9rem; font-weight: 600; color: var(--text); }
+    .clue-btn:not(.unlocked):not(.done) .clue-name { color: var(--muted); }
 
-    .msg {
-      display: flex; gap: .6rem; animation: fadeIn .3s ease;
+    .clue-arrow {
+      font-size: .8rem; color: var(--muted); margin-left: auto;
+      opacity: 0; transition: opacity .2s;
     }
-    .msg.user { flex-direction: row-reverse; }
-    .msg-bubble {
-      max-width: 80%; padding: .7rem 1rem; border-radius: 1rem;
-      font-size: .9rem; line-height: 1.5;
-    }
-    .msg.bot .msg-bubble {
-      background: #1e1e38; border: 1px solid var(--border);
-      color: var(--text); border-top-left-radius: .2rem;
-    }
-    .msg.user .msg-bubble {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff; border-top-right-radius: .2rem;
-    }
-    .msg-icon {
-      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: .9rem;
-      background: #1e1e38; border: 1px solid var(--border); align-self: flex-end;
-    }
-    .msg.user .msg-icon { background: rgba(192,132,252,.2); border-color: var(--accent); }
+    .clue-btn.unlocked .clue-arrow,
+    .clue-btn.done .clue-arrow { opacity: 1; color: var(--accent); }
+    .clue-btn.done .clue-arrow { color: var(--success); }
 
-    /* typing indicator */
-    .typing .msg-bubble {
-      display: flex; gap: 4px; align-items: center; padding: .8rem 1rem;
+    /* ── Clue modal ────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(4px);
+      z-index: 300; align-items: flex-end; justify-content: center;
+      padding: 1rem;
     }
-    .dot {
-      width: 6px; height: 6px; background: var(--muted); border-radius: 50%;
-      animation: bounce .9s infinite;
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 1.2rem 1.2rem 1rem 1rem; padding: 2rem;
+      width: 100%; max-width: 480px;
+      animation: slideModal .35s cubic-bezier(.22,1,.36,1);
+      position: relative;
     }
-    .dot:nth-child(2) { animation-delay: .15s; }
-    .dot:nth-child(3) { animation-delay: .3s; }
-    @keyframes bounce {
-      0%,60%,100% { transform: translateY(0); }
-      30%          { transform: translateY(-6px); }
+    @keyframes slideModal {
+      from { transform: translateY(60px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
     }
+    .modal-drag {
+      width: 40px; height: 4px; background: var(--border);
+      border-radius: 99px; margin: -1rem auto 1.5rem;
+    }
+    .modal-clue-num {
+      font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: .3rem;
+    }
+    .modal-emoji { font-size: 2.8rem; text-align: center; display: block; margin-bottom: .8rem; }
+    .modal h2 { font-size: 1.25rem; margin-bottom: .8rem; }
+    .modal-body {
+      font-size: 1rem; color: var(--text); line-height: 1.75;
+      margin-bottom: 1.5rem; white-space: pre-line;
+    }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.2rem; cursor: pointer; padding: .3rem;
+      border-radius: .4rem; transition: color .2s;
+    }
+    .modal-close:hover { color: var(--text); }
 
-    .chat-input-row {
-      display: flex; gap: .5rem;
-    }
-    .chat-input {
-      flex: 1; padding: .7rem 1rem; background: var(--bg);
-      border: 1.5px solid var(--border); border-radius: .7rem;
-      color: var(--text); font-size: .95rem; outline: none;
-      transition: border-color .2s; resize: none; font-family: inherit;
-    }
-    .chat-input:focus { border-color: var(--accent); }
-    .btn-send {
-      width: 46px; height: 46px; border-radius: .7rem; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none; color: #fff; font-size: 1.1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform .15s, box-shadow .15s;
-    }
-    .btn-send:hover { box-shadow: 0 4px 16px rgba(192,132,252,.5); }
-    .btn-send:active { transform: scale(.93); }
-    .btn-send:disabled { opacity: .4; cursor: not-allowed; }
-
-    /* Hotel cards */
-    .hotels-grid { display: grid; gap: .8rem; margin-top: 1rem; }
+    /* ── Hotel grid ────────────────────────────────── */
+    .hotels-grid { display: grid; gap: .7rem; margin: 1rem 0; }
     .hotel-card {
       background: var(--bg); border: 1.5px solid var(--border);
-      border-radius: .8rem; padding: 1rem 1.2rem; cursor: pointer;
-      transition: border-color .2s, background .2s, transform .15s;
+      border-radius: .85rem; padding: 1rem 1.1rem; cursor: pointer;
       display: flex; align-items: center; gap: 1rem;
+      transition: border-color .2s, background .2s, transform .15s;
     }
     .hotel-card:hover { border-color: var(--accent); background: rgba(192,132,252,.05); transform: translateY(-2px); }
-    .hotel-card.selected { border-color: var(--gold); background: rgba(251,191,36,.07); }
-    .hotel-card .hotel-emoji { font-size: 1.8rem; flex-shrink: 0; }
-    .hotel-card .hotel-name { font-weight: 600; color: var(--text); font-size: .95rem; }
-    .hotel-card .hotel-desc { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+    .hotel-card.selected { border-color: var(--gold); background: rgba(251,191,36,.06); }
+    .hotel-emoji { font-size: 1.9rem; flex-shrink: 0; }
+    .hotel-name { font-weight: 600; color: var(--text); font-size: .92rem; }
+    .hotel-desc { font-size: .78rem; color: var(--muted); margin-top: .15rem; }
 
-    .gift-items { display: grid; gap: .8rem; margin: 1.4rem 0; }
-    .gift-item {
+    /* ── Final ─────────────────────────────────────── */
+    .gift-list { display: grid; gap: .7rem; margin: 1.2rem 0; }
+    .gift-row {
       background: var(--bg); border: 1px solid var(--border);
-      border-radius: .8rem; padding: 1rem 1.2rem;
-      display: flex; align-items: center; gap: 1rem;
+      border-radius: .85rem; padding: .9rem 1.1rem;
+      display: flex; align-items: center; gap: .9rem;
     }
-    .gift-item .gi-icon { font-size: 2rem; flex-shrink: 0; }
-    .gift-item .gi-title { font-weight: 700; color: var(--text); }
-    .gift-item .gi-sub { font-size: .85rem; color: var(--muted); }
-    .selected-hotel-tag {
-      display: inline-block; background: rgba(251,191,36,.15);
+    .gift-row-icon { font-size: 1.9rem; flex-shrink: 0; }
+    .gift-row-title { font-weight: 700; color: var(--text); font-size: .95rem; }
+    .gift-row-sub { font-size: .8rem; color: var(--muted); margin-top: .1rem; }
+    .hotel-badge {
+      display: inline-block; background: rgba(251,191,36,.13);
       border: 1px solid var(--gold); color: var(--gold);
-      border-radius: 99px; padding: .2rem .8rem; font-size: .8rem; margin-top: .4rem;
+      border-radius: 99px; padding: .15rem .75rem; font-size: .78rem; margin-top: .35rem;
     }
-    .divider { height: 1px; background: var(--border); margin: 1.2rem 0; }
-    .signature { text-align: center; font-size: .8rem; color: var(--muted); margin-top: 1.5rem; }
+    .divider { height: 1px; background: var(--border); margin: 1.1rem 0; }
+    .signature { text-align: center; font-size: .78rem; color: var(--muted); margin-top: 1.3rem; }
     .signature span { color: var(--accent2); }
-    #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
+
+    #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 200; }
   </style>
 </head>
 <body>
+
+<!-- Stars background -->
+<div class="stars" id="stars"></div>
 <canvas id="confetti-canvas"></canvas>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-drag"></div>
+    <span class="modal-emoji" id="modal-emoji"></span>
+    <div class="modal-clue-num" id="modal-num"></div>
+    <h2 id="modal-title"></h2>
+    <div class="modal-body" id="modal-body"></div>
+    <button class="btn btn-primary" id="modal-cta" onclick="confirmClue()"></button>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- SCREEN 0: Benvinguda -->
   <div class="screen active" id="screen-welcome">
     <div class="card">
-      <span class="emoji-big">🎁</span>
-      <h1>Tens un regal especial</h1>
-      <p>Hola, <strong>[NOM_PERSONA]</strong>! T'he preparat alguna cosa molt especial.
-      Parla amb la guia misteriosa per anar descobrint el teu regal...</p>
-      <button class="btn btn-primary" onclick="goTo('screen-chat')">Descobrir el regal 🔮</button>
+      <span class="emoji-xl">🎁</span>
+      <h1>Tens un regal molt especial</h1>
+      <p>Hola, <strong>[NOM_PERSONA]</strong>!<br>
+      He preparat un petit misteri per a tu. Segueix les pistes per descobrir el teu regal.</p>
+      <button class="btn btn-primary" onclick="goTo('screen-clues')">Començar l'aventura ✨</button>
     </div>
     <p class="signature">Fet amb <span>♥</span> per <strong>[EL_TEU_NOM]</strong></p>
   </div>
 
-  <!-- SCREEN 1: Chat -->
-  <div class="screen" id="screen-chat">
-    <div class="card" style="padding:1.5rem">
-      <div class="chat-wrap">
-        <div class="chat-header">
-          <div class="chat-avatar">🔮</div>
-          <div class="chat-avatar-info">
-            <div class="name">La guia misteriosa</div>
-            <div class="status">● En línia</div>
-          </div>
-        </div>
-        <div class="messages" id="messages"></div>
-        <div class="chat-input-row">
-          <textarea class="chat-input" id="chat-input" placeholder="Pregunta alguna cosa..." rows="1"
-            onkeydown="handleKey(event)"></textarea>
-          <button class="btn-send" id="btn-send" onclick="sendMessage()">➤</button>
-        </div>
-      </div>
-    </div>
-    <div style="text-align:center; margin-top:1rem">
-      <button class="btn btn-primary" style="width:auto;padding:.6rem 1.4rem;font-size:.85rem"
-        onclick="goTo('screen-hotel')">
-        Ja sé el regal! Triar hotel 🏨
-      </button>
+  <!-- SCREEN 1: Pistes -->
+  <div class="screen" id="screen-clues">
+    <div class="card">
+      <h1>Segueix les pistes</h1>
+      <p>Cada pista et porta a la següent. Clica-les en ordre!</p>
+      <div class="clue-path" id="clue-path"></div>
     </div>
   </div>
 
   <!-- SCREEN 2: Hotel -->
   <div class="screen" id="screen-hotel">
     <div class="card">
-      <span class="emoji-big">🏨</span>
+      <span class="emoji-xl">🏨</span>
       <h1>Tria el teu hotel!</h1>
-      <p>Part del regal és una nit d'hotel. Quin prefereixes?</p>
+      <p>El regal inclou una nit d'hotel. Quin et ve de gust?</p>
       <div class="hotels-grid">
         <div class="hotel-card" onclick="selectHotel(this, '[HOTEL_1]')">
           <span class="hotel-emoji">🏰</span>
           <div>
             <div class="hotel-name">[HOTEL_1]</div>
-            <div class="hotel-desc">[Descripció hotel 1]</div>
+            <div class="hotel-desc">[Descripció — ubicació, estil, destacat...]</div>
           </div>
         </div>
         <div class="hotel-card" onclick="selectHotel(this, '[HOTEL_2]')">
           <span class="hotel-emoji">🌅</span>
           <div>
             <div class="hotel-name">[HOTEL_2]</div>
-            <div class="hotel-desc">[Descripció hotel 2]</div>
+            <div class="hotel-desc">[Descripció — ubicació, estil, destacat...]</div>
           </div>
         </div>
         <div class="hotel-card" onclick="selectHotel(this, '[HOTEL_3]')">
           <span class="hotel-emoji">🌿</span>
           <div>
             <div class="hotel-name">[HOTEL_3]</div>
-            <div class="hotel-desc">[Descripció hotel 3]</div>
+            <div class="hotel-desc">[Descripció — ubicació, estil, destacat...]</div>
           </div>
         </div>
       </div>
       <div class="divider"></div>
-      <button class="btn btn-primary" id="btn-confirm-hotel" onclick="confirmHotel()" disabled style="opacity:.4">
+      <button class="btn btn-primary" id="btn-hotel" onclick="confirmHotel()" disabled>
         Confirmar elecció 🏨
       </button>
     </div>
@@ -266,29 +317,31 @@
   <!-- SCREEN 3: Final -->
   <div class="screen" id="screen-final">
     <div class="card" style="text-align:center">
-      <span class="emoji-big" style="font-size:4rem">🎉</span>
+      <span class="emoji-xl" style="font-size:4rem">🎉</span>
       <h1>El teu regal!</h1>
-      <p>Felicitats, <strong>[NOM_PERSONA]</strong>!</p>
-      <div class="gift-items" style="text-align:left">
-        <div class="gift-item">
-          <span class="gi-icon">🍽️</span>
+      <p>Felicitats, <strong>[NOM_PERSONA]</strong>! Aquí tens tot el que t'espera:</p>
+      <div class="gift-list" style="text-align:left">
+        <div class="gift-row">
+          <span class="gift-row-icon">🍽️</span>
           <div>
-            <div class="gi-title">Dinar per a dos</div>
-            <div class="gi-sub">al restaurant <strong>[NOM_RESTAURANT]</strong></div>
+            <div class="gift-row-title">Dinar per a dos</div>
+            <div class="gift-row-sub">al restaurant <strong>[NOM_RESTAURANT]</strong></div>
           </div>
         </div>
-        <div class="gift-item">
-          <span class="gi-icon">🌙</span>
+        <div class="gift-row">
+          <span class="gift-row-icon">🌙</span>
           <div>
-            <div class="gi-title">Nit d'hotel</div>
-            <div class="gi-sub">Hotel seleccionat:</div>
-            <div class="selected-hotel-tag" id="final-hotel-name">—</div>
+            <div class="gift-row-title">Nit d'hotel</div>
+            <div class="gift-row-sub">Hotel seleccionat:</div>
+            <div class="hotel-badge" id="final-hotel">—</div>
           </div>
         </div>
       </div>
       <div class="divider"></div>
-      <p style="font-size:.9rem">[MISSATGE_FINAL]</p>
-      <button class="btn btn-primary" style="margin-top:1rem" onclick="launchConfetti()">Celebrar! 🎊</button>
+      <p style="font-size:.9rem;font-style:italic">"[MISSATGE_FINAL]"</p>
+      <button class="btn btn-primary" style="margin-top:1.2rem" onclick="launchConfetti()">
+        Celebrar! 🎊
+      </button>
     </div>
     <p class="signature">Fet amb <span>♥</span> per <strong>[EL_TEU_NOM]</strong></p>
   </div>
@@ -296,150 +349,195 @@
 </div>
 
 <script>
-let chatHistory = [];
-let isLoading = false;
-let selectedHotel = null;
+// ============================================================
+// CONFIGURACIÓ — Edita aquí les teves pistes
+// ============================================================
+const CLUES = [
+  {
+    emoji: "🍽️",
+    tag: "Pista 1",
+    name: "Una cosa de menjar...",
+    title: "Primera pista",
+    // El text que apareix al modal. Pots posar salts de línia amb \n
+    body: "[PISTA_1]\n\nEx: \"El teu regal té a veure amb un dels teus restaurants preferits...\"",
+  },
+  {
+    emoji: "📍",
+    tag: "Pista 2",
+    name: "Un lloc especial...",
+    title: "Segona pista",
+    body: "[PISTA_2]\n\nEx: \"I el lloc és molt especial per a vosaltres dos...\"",
+  },
+  {
+    emoji: "🌙",
+    tag: "Pista 3",
+    name: "I una nit...",
+    title: "Tercera pista",
+    body: "[PISTA_3]\n\nEx: \"No serà només un dinar. Quedareu a dormir!\"",
+  },
+  {
+    emoji: "🎁",
+    tag: "Regal final",
+    name: "Revelar el regal!",
+    title: "El teu regal!",
+    body: "Ja has seguit totes les pistes!\n\nEl teu regal és un dinar al restaurant [NOM_RESTAURANT] i una nit d'hotel que tu tries. 🥂🌙\n\nClica per escollir l'hotel!",
+    isFinal: true,
+  },
+];
+// ============================================================
 
+let activeClue = null;
+let unlockedUpTo = 0;
+let selectedHotelName = null;
+
+// ── Stars ────────────────────────────────────────────────────
+function buildStars() {
+  const container = document.getElementById("stars");
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    const size = .8 + Math.random() * 1.8;
+    s.style.cssText =
+      "width:" + size + "px;height:" + size + "px;" +
+      "top:" + Math.random() * 100 + "%;left:" + Math.random() * 100 + "%;" +
+      "--d:" + (2 + Math.random() * 3) + "s;--delay:-" + (Math.random() * 4) + "s";
+    container.appendChild(s);
+  }
+}
+
+// ── Clue path ────────────────────────────────────────────────
+function buildPath() {
+  const path = document.getElementById("clue-path");
+  path.innerHTML = "";
+
+  CLUES.forEach((clue, i) => {
+    // Vertical connector (not before first)
+    if (i > 0) {
+      const conn = document.createElement("div");
+      conn.className = "v-connector" + (i <= unlockedUpTo ? " done" : "");
+      conn.id = "conn-" + i;
+      path.appendChild(conn);
+    }
+
+    const btn = document.createElement("button");
+    btn.className = "clue-btn" +
+      (clue.isFinal ? " final-btn" : "") +
+      (i < unlockedUpTo ? " done" : "") +
+      (i === unlockedUpTo ? " unlocked" : "");
+    btn.id = "clue-" + i;
+    btn.disabled = i > unlockedUpTo;
+
+    let iconContent = i < unlockedUpTo ? "✅" : (i === unlockedUpTo ? clue.emoji : "🔒");
+
+    btn.innerHTML =
+      "<div class='clue-icon'>" + iconContent + "</div>" +
+      "<div class='clue-text'>" +
+        "<div class='clue-tag'>" + clue.tag + "</div>" +
+        "<div class='clue-name'>" + clue.name + "</div>" +
+      "</div>" +
+      "<span class='clue-arrow'>›</span>";
+
+    if (i <= unlockedUpTo) {
+      btn.onclick = () => openModal(i);
+    }
+    path.appendChild(btn);
+  });
+}
+
+// ── Modal ────────────────────────────────────────────────────
+function openModal(i) {
+  const clue = CLUES[i];
+  activeClue = i;
+  document.getElementById("modal-emoji").textContent = clue.emoji;
+  document.getElementById("modal-num").textContent = clue.tag;
+  document.getElementById("modal-title").textContent = clue.title;
+  document.getElementById("modal-body").textContent = clue.body;
+  document.getElementById("modal-cta").textContent =
+    clue.isFinal ? "Triar l'hotel! 🏨" : (i < unlockedUpTo ? "Tancar" : "Entès! Segueix →");
+  document.getElementById("modal-overlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modal-overlay").classList.remove("open");
+}
+
+function confirmClue() {
+  const i = activeClue;
+  closeModal();
+
+  if (CLUES[i].isFinal) {
+    goTo("screen-hotel");
+    return;
+  }
+
+  // Already seen? just close
+  if (i < unlockedUpTo) return;
+
+  // Unlock next
+  unlockedUpTo = i + 1;
+  buildPath();
+}
+
+// ── Navigation ────────────────────────────────────────────────
 function goTo(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
-  if (id === "screen-chat" && chatHistory.length === 0) {
-    addBotMessage("Hola! 🔮 Soc la guia del teu regal especial. Pregunta'm qualsevol cosa per anar descobrint-lo...");
-  }
 }
 
-function addMessage(role, text) {
-  const container = document.getElementById("messages");
-  const isUser = role === "user";
-  const div = document.createElement("div");
-  div.className = "msg " + (isUser ? "user" : "bot");
-  div.innerHTML =
-    "<div class='msg-icon'>" + (isUser ? "👤" : "🔮") + "</div>" +
-    "<div class='msg-bubble'>" + escapeHtml(text) + "</div>";
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-function addBotMessage(text) {
-  chatHistory.push({ role: "assistant", content: text });
-  addMessage("bot", text);
-}
-
-function showTyping() {
-  const container = document.getElementById("messages");
-  const div = document.createElement("div");
-  div.className = "msg bot typing";
-  div.id = "typing-indicator";
-  div.innerHTML =
-    "<div class='msg-icon'>🔮</div>" +
-    "<div class='msg-bubble'><div class='dot'></div><div class='dot'></div><div class='dot'></div></div>";
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-function removeTyping() {
-  const el = document.getElementById("typing-indicator");
-  if (el) el.remove();
-}
-
-async function sendMessage() {
-  const input = document.getElementById("chat-input");
-  const text = input.value.trim();
-  if (!text || isLoading) return;
-
-  input.value = "";
-  input.style.height = "auto";
-  isLoading = true;
-  document.getElementById("btn-send").disabled = true;
-
-  chatHistory.push({ role: "user", content: text });
-  addMessage("user", text);
-  showTyping();
-
-  try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ messages: chatHistory }),
-    });
-    const data = await res.json();
-    removeTyping();
-    if (data.reply) {
-      addBotMessage(data.reply);
-    } else {
-      addBotMessage("Ups, alguna cosa ha fallat. Torna-ho a intentar!");
-    }
-  } catch {
-    removeTyping();
-    addBotMessage("No puc connectar ara mateix. Comprova la connexió!");
-  }
-
-  isLoading = false;
-  document.getElementById("btn-send").disabled = false;
-  input.focus();
-}
-
-function handleKey(e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-  // Auto-resize textarea
-  e.target.style.height = "auto";
-  e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-            .replace(/\n/g,"<br>");
-}
-
+// ── Hotel ─────────────────────────────────────────────────────
 function selectHotel(el, name) {
   document.querySelectorAll(".hotel-card").forEach(c => c.classList.remove("selected"));
   el.classList.add("selected");
-  selectedHotel = name;
-  const btn = document.getElementById("btn-confirm-hotel");
+  selectedHotelName = name;
+  const btn = document.getElementById("btn-hotel");
   btn.disabled = false;
-  btn.style.opacity = "1";
 }
 
 function confirmHotel() {
-  if (!selectedHotel) return;
-  document.getElementById("final-hotel-name").textContent = selectedHotel;
+  if (!selectedHotelName) return;
+  document.getElementById("final-hotel").textContent = selectedHotelName;
   goTo("screen-final");
-  setTimeout(launchConfetti, 400);
+  setTimeout(launchConfetti, 500);
 }
 
+// ── Confetti ──────────────────────────────────────────────────
 function launchConfetti() {
   const canvas = document.getElementById("confetti-canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  const colors = ["#c084fc","#f472b6","#fbbf24","#34d399","#60a5fa","#fff"];
-  const pieces = Array.from({ length: 140 }, () => ({
-    x: Math.random() * canvas.width, y: -10 - Math.random() * 200,
-    r: 4 + Math.random() * 7, d: 2 + Math.random() * 3,
+  const colors = ["#c084fc","#f472b6","#fbbf24","#34d399","#60a5fa","#fff","#fb7185"];
+  const pieces = Array.from({ length: 160 }, () => ({
+    x: Math.random() * canvas.width, y: -20 - Math.random() * 150,
+    r: 3 + Math.random() * 7, d: 1.5 + Math.random() * 3.5,
     color: colors[Math.floor(Math.random() * colors.length)],
-    tilt: Math.random() * 10 - 5, tiltSpeed: Math.random() * .1,
+    tilt: Math.random() * 12 - 6, ts: (Math.random() - .5) * .15,
+    wobble: Math.random() * Math.PI * 2,
   }));
   let frame = 0;
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     pieces.forEach(p => {
-      p.y += p.d; p.tilt += p.tiltSpeed;
-      const alpha = Math.max(0, 1 - p.y / (canvas.height * 1.1));
+      p.y += p.d; p.tilt += p.ts; p.wobble += .05;
+      const alpha = Math.max(0, 1 - p.y / (canvas.height * 1.05));
       ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.ellipse(p.x + Math.sin(p.tilt) * 8, p.y, p.r, p.r * .5, p.tilt, 0, Math.PI * 2);
+      ctx.ellipse(
+        p.x + Math.sin(p.wobble) * 6, p.y,
+        p.r, p.r * .45, p.tilt, 0, Math.PI * 2
+      );
       ctx.fill(); ctx.restore();
     });
-    frame++;
-    if (frame < 220) requestAnimationFrame(draw);
+    if (++frame < 240) requestAnimationFrame(draw);
     else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   draw();
 }
+
+// ── Init ──────────────────────────────────────────────────────
+buildStars();
+buildPath();
 </script>
 </body>
 </html>
