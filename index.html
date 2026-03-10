@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endevina el teu Regal 🎁</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0c0b09;
+  --surface: #141210;
+  --cream: #ede8dc;
+  --cream-dim: rgba(237,232,220,0.85);
+  --gold: #c8a951;
+  --gold-glow: rgba(200,169,81,0.15);
+  --gold-dim: rgba(200,169,81,0.3);
+  --green: #5a9e7a;
+  --green-dim: rgba(90,158,122,0.15);
+  --red: #a05050;
+  --red-dim: rgba(160,80,80,0.12);
+  --blue: #5a7e9e;
+  --blue-dim: rgba(90,126,158,0.12);
+  --muted: #6b6356;
+}
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(200,169,81,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 15% 80%, rgba(90,158,122,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 85% 80%, rgba(160,80,80,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  padding: 0 1.5rem 4rem;
+}
+
+.site-header {
+  text-align: center;
+  padding: 3.5rem 0 2.5rem;
+  animation: fadeDown 0.9s ease both;
+}
+
+.eyebrow {
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+}
+
+.site-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.1;
+  color: var(--cream);
+}
+
+.site-title em { font-style: italic; color: var(--gold); }
+
+.header-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  margin: 1.5rem auto 0;
+  opacity: 0.5;
+}
+
+.progress-wrap {
+  margin-bottom: 2rem;
+  animation: fadeIn 1s ease both 0.3s;
+}
+
+.progress-track {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
+  width: 0%;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid rgba(200,169,81,0.12);
+  padding: 2.2rem 2rem 1.8rem;
+  position: relative;
+  animation: slideUp 0.5s cubic-bezier(0.2,0,0,1) both;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.card-step {
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.card-step::before {
+  content: '';
+  display: block;
+  width: 20px; height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+}
+
+.question {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 3.5vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--cream);
+  margin-bottom: 0.8rem;
+}
+
+.hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 1.8rem;
+  border-left: 2px solid var(--gold-dim);
+  padding-left: 0.8rem;
+  line-height: 1.5;
+}
+
+.btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.btn-group-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+.btn {
+  padding: 0.85rem 1rem;
+  border: 1px solid;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.btn span { position: relative; z-index: 1; }
+.btn::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.25s; }
+
+.btn-yes { border-color: var(--green); color: var(--green); }
+.btn-yes::before { background: var(--green-dim); }
+.btn-yes:hover::before { opacity: 1; }
+
+.btn-no { border-color: rgba(255,255,255,0.12); color: var(--muted); }
+.btn-no::before { background: rgba(255,255,255,0.04); }
+.btn-no:hover::before { opacity: 1; }
+.btn-no:hover { color: var(--cream); border-color: rgba(255,255,255,0.3); }
+
+.btn-choice {
+  border-color: rgba(200,169,81,0.2);
+  color: var(--cream-dim);
+  padding: 1rem 0.8rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+.btn-choice::before { background: var(--gold-glow); }
+.btn-choice:hover::before { opacity: 1; }
+.btn-choice:hover { border-color: var(--gold-dim); color: var(--cream); }
+.btn-choice .stars { display: block; color: var(--gold); font-size: 0.7rem; margin-top: 0.3rem; }
+.btn-choice .location { display: block; color: var(--muted); font-size: 0.55rem; margin-top: 0.2rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.path-log {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1.2rem;
+  min-height: 24px;
+}
+
+.path-chip {
+  font-size: 0.5rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.chip-yes { border-color: rgba(90,158,122,0.35); color: var(--green); background: var(--green-dim); }
+.chip-no  { border-color: rgba(160,80,80,0.3); color: var(--red); background: var(--red-dim); }
+.chip-choice { border-color: rgba(200,169,81,0.3); color: var(--gold); background: var(--gold-glow); }
+
+/* WRONG */
+.screen-wrong {
+  background: var(--surface);
+  border: 1px solid rgba(160,80,80,0.2);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  animation: slideUp 0.5s cubic-bezier(0.2,0,0,1) both;
+}
+.wrong-icon { font-size: 2.5rem; margin-bottom: 1.2rem; display: block; }
+.wrong-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 400; font-style: italic;
+  color: var(--cream-dim); margin-bottom: 0.5rem;
+}
+.wrong-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 1.8rem; line-height: 1.7; }
+
+/* ORNITOREPTE */
+.screen-orni {
+  background: var(--surface);
+  border: 1px solid rgba(90,126,158,0.3);
+  overflow: hidden;
+  animation: slideUp 0.6s cubic-bezier(0.2,0,0,1) both;
+}
+.orni-top {
+  background: linear-gradient(135deg, rgba(90,126,158,0.1), rgba(90,126,158,0.03));
+  border-bottom: 1px solid rgba(90,126,158,0.25);
+  padding: 2.2rem 2rem 1.8rem;
+  text-align: center;
+}
+.orni-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+.orni-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 400; font-style: italic;
+  color: var(--blue); margin-bottom: 0.4rem; line-height: 1.2;
+}
+.orni-sub { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+.orni-bottom { padding: 1.5rem 2rem; }
+.orni-msg {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-style: italic;
+  color: var(--cream-dim); line-height: 1.6;
+  margin-bottom: 1rem; text-align: center;
+}
+.orni-note {
+  font-size: 0.72rem; color: var(--muted);
+  text-align: center; line-height: 1.7;
+  padding: 0.8rem;
+  border: 1px solid rgba(90,126,158,0.15);
+  background: rgba(90,126,158,0.05);
+}
+.orni-note strong { color: var(--cream-dim); }
+
+/* WIN */
+.screen-win {
+  background: var(--surface);
+  border: 1px solid rgba(200,169,81,0.2);
+  overflow: hidden;
+  animation: slideUp 0.6s cubic-bezier(0.2,0,0,1) both;
+}
+.win-top {
+  background: linear-gradient(135deg, rgba(200,169,81,0.1), rgba(200,169,81,0.03));
+  border-bottom: 1px solid var(--gold-dim);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+}
+.win-stars {
+  font-size: 0.58rem; letter-spacing: 0.4em;
+  color: var(--gold); margin-bottom: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+}
+.win-stars::before, .win-stars::after { content: '★ ★'; letter-spacing: 0.3em; }
+.win-restaurant {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
+  font-weight: 500; font-style: italic;
+  color: var(--gold); line-height: 1.1; margin-bottom: 0.4rem;
+}
+.win-location { font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); }
+.win-bottom { padding: 1.8rem 2rem; }
+.win-detail {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.win-detail:last-of-type { border-bottom: none; }
+.win-detail-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.win-detail-label { font-size: 0.5rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.2rem; }
+.win-detail-text { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); line-height: 1.4; }
+.win-detail-sub { font-size: 0.7rem; color: #9e9589; margin-top: 0.15rem; }
+.confetti-line { text-align: center; font-size: 1.4rem; letter-spacing: 0.5rem; padding: 1.2rem 0 0.5rem; }
+
+.btn-restart {
+  width: 100%; margin-top: 1rem; padding: 0.8rem;
+  background: transparent;
+  border: 1px solid rgba(200,169,81,0.15);
+  color: var(--muted); cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.6rem; font-weight: 400;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  transition: all 0.25s;
+}
+.btn-restart:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+@keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes slideUp  { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.fade-exit { animation: fadeExit 0.25s ease forwards; }
+@keyframes fadeExit { to { opacity:0; transform:translateY(-10px); } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="site-header">
+    <p class="eyebrow">Un regal especial t'espera</p>
+    <h1 class="site-title">Endevina<br><em>el teu regal</em></h1>
+    <div class="header-line"></div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">
+      <span id="stepLabel">Pregunta 1</span>
+      <span id="stepFraction">1 / 12</span>
+    </div>
+  </div>
+
+  <div id="gameArea"></div>
+  <div class="path-log" id="pathLog"></div>
+
+</div>
+<script>
+const WRONG = { result:'wrong' };
+const WIN   = { result:'win'   };
+const ORNI  = { result:'orni'  };
+
+const triaRestaurant = {
+  result: 'choice',
+  q: 'Quin creus que és el restaurant?',
+  hint: 'Tots tenen estrella Michelin a la zona... però només un és el teu regal!',
+  options: [
+    { label:'Els Tinars',            stars:'⭐',    location:'Llagostera', correct:false },
+    { label:'Bo·TiC',                stars:'⭐⭐',   location:'Corçà',      correct:true  },
+    { label:'El Celler de Can Roca', stars:'⭐⭐⭐',  location:'Girona',     correct:false },
+    { label:'Ca L\'Arpa',            stars:'⭐',    location:'Banyoles',   correct:false },
+  ]
+};
+
+// Camí compartit un cop sabem que és restaurant amb Michelin
+function caminaFinal() {
+  return {
+    q: 'Creus que el dinar serà aquest abril?',
+    hint: 'Potser és més aviat del que creus...',
+    yes: {
+      q: 'Creus que dinarem el mateix cap de setmana que anem a veure l\'ornitorepte?',
+      hint: 'Pensa en el cap de setmana que ja tenim planejat...',
+      yes: {
+        q: 'Creus que dinarem el dissabte, el dia abans de l\'ornitorepte?',
+        hint: 'Dissabte de gastronomia, diumenge de natura!',
+        yes: triaRestaurant,
+        no: WRONG
+      },
+      no: WRONG
+    },
+    no: WRONG
+  };
+}
+
+function caminaRestaurantMichelin() {
+  return {
+    q: 'Creus que té estrelles Michelin?',
+    hint: 'La guia més prestigiosa del món gastronòmic.',
+    yes: caminaFinal(),
+    no: WRONG
+  };
+}
+
+function caminaRestaurantCatalunya() {
+  return {
+    q: 'Creus que el restaurant és a Catalunya?',
+    hint: 'Potser més a prop del que creus...',
+    yes: caminaRestaurantMichelin(),
+    no: WRONG
+  };
+}
+
+// Branca física (activitat física → Sí)
+const brancaFisica = {
+  q: 'Creus que és a l\'aire lliure?',
+  hint: 'Un parc, un bosc, una zona natural...?',
+  yes: {
+    q: 'Creus que hi haurà animals?',
+    hint: 'Animals salvatges, fauna local...',
+    yes: {
+      q: 'Creus que és a l\'Empordà?',
+      hint: 'Una zona molt especial de la natura catalana...',
+      yes: ORNI,
+      no:  ORNI
+    },
+    no: WRONG
+  },
+  no: WRONG
+};
+
+// Arbre principal
+const tree = {
+  q: 'Creus que el regal és alguna cosa que es pot tocar o agafar amb les mans?',
+  hint: 'No tot el que es regala és un objecte material...',
+
+  yes: {
+    q: 'Creus que ho podries comprar en una botiga normal?',
+    hint: 'Una botiga de carrer, un supermercat, Amazon...',
+    yes: {
+      q: 'Creus que és alguna cosa que s\'utilitza al dia a dia?',
+      hint: 'Alguna cosa quotidiana, com roba, menjar, eines...',
+      yes: WRONG,
+      no: {
+        q: 'Creus que és per a una ocasió especial?',
+        hint: 'Alguna cosa que guardes per als moments únics.',
+        yes: {
+          q: 'Creus que està relacionat amb el món de la gastronomia?',
+          hint: 'Menjar, cuina, restaurants, vins...',
+          yes: {
+            q: 'Creus que el restaurant té algun premi o reconeixement oficial?',
+            hint: 'No tots els restaurants són iguals...',
+            yes: caminaRestaurantMichelin(),
+            no: WRONG
+          },
+          no: WRONG
+        },
+        no: WRONG
+      }
+    },
+    no: {
+      q: 'Creus que és un objecte de luxe?',
+      hint: 'Alguna cosa fora del comú, especial, exclusiva.',
+      yes: {
+        q: 'Creus que implica sortir de casa?',
+        hint: 'O és un objecte que t\'emportes a casa?',
+        yes: {
+          q: 'Creus que està relacionat amb el món de la gastronomia?',
+          hint: 'Menjar, cuina, restaurants, vins...',
+          yes: {
+            q: 'Creus que el restaurant té algun premi o reconeixement oficial?',
+            hint: 'No tots els restaurants són iguals...',
+            yes: caminaRestaurantMichelin(),
+            no: WRONG
+          },
+          no: WRONG
+        },
+        no: WRONG
+      },
+      no: WRONG
+    }
+  },
+
+  no: {
+    q: 'Creus que necessitaràs desplaçar-te per gaudir-ho?',
+    hint: 'Hauries de sortir de casa i anar a algun lloc concret?',
+    yes: {
+      q: 'Creus que és per a dues persones?',
+      hint: 'Un pla per compartir, o un regal individual?',
+      yes: {
+        q: 'Creus que implica activitat física?',
+        hint: 'Caminar, moure\'s, esforç físic...',
+        yes: brancaFisica,
+        no: {
+          q: 'Creus que té a veure amb ocells?',
+          hint: 'Observació d\'ocells, ornitologia...',
+          yes: WRONG,
+          no: {
+            q: 'Creus que inclou menjar i/o beure?',
+            hint: 'El menjar i la beguda formen part del pla?',
+            yes: {
+              q: 'Creus que és en un restaurant?',
+              hint: 'Un lloc amb cuina professional i servei de taula.',
+              yes: caminaRestaurantCatalunya(),
+              no: WRONG
+            },
+            no: WRONG
+          }
+        }
+      },
+      no: {
+        q: 'Creus que durarà més de 2 hores?',
+        hint: 'Una experiència llarga i reposada, o quelcom breu?',
+        yes: {
+          q: 'Creus que és un àpat en un restaurant?',
+          hint: 'Menjar en un lloc especial, amb servei i cuina professional.',
+          yes: caminaRestaurantCatalunya(),
+          no: WRONG
+        },
+        no: WRONG
+      }
+    },
+    no: WRONG
+  }
+};
+
+// ── STATE ──────────────────────────────────────────────────────
+let current  = tree;
+let stepNum  = 0;
+let pathLog  = [];
+let history  = []; // stack of { node, stepNum, pathLog snapshot }
+const TOTAL  = 12;
+
+// ── RENDER ─────────────────────────────────────────────────────
+function render(node, animate = true) {
+  const area = document.getElementById('gameArea');
+  if (animate && area.firstChild) {
+    area.firstChild.classList.add('fade-exit');
+    setTimeout(() => draw(node), 260);
+  } else {
+    draw(node);
+  }
+}
+
+function draw(node) {
+  const area = document.getElementById('gameArea');
+  area.innerHTML = '';
+  document.querySelectorAll('.btn-restart-outer').forEach(b => b.remove());
+
+  const pct = Math.min((stepNum / TOTAL) * 100, 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  if (node.result === 'win')    { document.getElementById('stepLabel').textContent = '🎉 Ho has endevinat!'; document.getElementById('stepFraction').textContent = ''; drawWin(area); return; }
+  if (node.result === 'wrong')  { document.getElementById('stepLabel').textContent = '🤔 Camí equivocat';   document.getElementById('stepFraction').textContent = ''; drawWrong(area); return; }
+  if (node.result === 'orni')   { document.getElementById('stepLabel').textContent = '🦎 Sorpresa!';         document.getElementById('stepFraction').textContent = ''; drawOrni(area); return; }
+  if (node.result === 'choice') { document.getElementById('stepLabel').textContent = 'Pregunta final'; document.getElementById('stepFraction').textContent = `${stepNum + 1} / ${TOTAL}`; drawChoice(area, node); return; }
+
+  document.getElementById('stepLabel').textContent = `Pregunta ${stepNum + 1}`;
+  document.getElementById('stepFraction').textContent = `${stepNum + 1} / ${TOTAL}`;
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-step">Pista ${stepNum + 1} de ${TOTAL}</div>
+    <div class="question">${node.q}</div>
+    ${node.hint ? `<div class="hint">${node.hint}</div>` : ''}
+    <div class="btn-group">
+      <button class="btn btn-yes" onclick="answer(true)"><span>Sí, crec que sí</span></button>
+      <button class="btn btn-no"  onclick="answer(false)"><span>No, crec que no</span></button>
+    </div>`;
+  area.appendChild(card);
+  renderChips();
+}
+
+function drawChoice(area, node) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  const btns = node.options.map((opt, i) => `
+    <button class="btn btn-choice" onclick="answerChoice(${i})">
+      <span>${opt.label}</span>
+      <span class="stars">${opt.stars}</span>
+      <span class="location">${opt.location}</span>
+    </button>`).join('');
+  card.innerHTML = `
+    <div class="card-step">Pregunta final</div>
+    <div class="question">${node.q}</div>
+    ${node.hint ? `<div class="hint">${node.hint}</div>` : ''}
+    <div class="btn-group-4">${btns}</div>`;
+  area.appendChild(card);
+  renderChips();
+}
+
+function drawWin(area) {
+  const el = document.createElement('div');
+  el.className = 'screen-win';
+  el.innerHTML = `
+    <div class="win-top">
+      <div class="win-stars">Dues Estrelles Michelin</div>
+      <div class="win-restaurant">Bo·TiC</div>
+      <div class="win-location">Corçà · Girona · Costa Brava</div>
+    </div>
+    <div class="win-bottom">
+      <div class="confetti-line">🎁 🌟 🍽️ 🌿 🎁</div>
+      <div class="win-detail">
+        <div class="win-detail-icon">🍽️</div>
+        <div class="win-detail-content">
+          <div class="win-detail-label">El regal</div>
+          <div class="win-detail-text">Un dinar al restaurant Bo·TiC</div>
+          <div class="win-detail-sub">Cuina d'autor catalana · Albert Sastregener & Cristina Torrent</div>
+        </div>
+      </div>
+      <div class="win-detail">
+        <div class="win-detail-icon">📅</div>
+        <div class="win-detail-content">
+          <div class="win-detail-label">La data</div>
+          <div class="win-detail-text">Dissabte, 11 d'abril</div>
+          <div class="win-detail-sub">El dia abans de l'ornitorepte als Aiguamolls!</div>
+        </div>
+      </div>
+      <div class="win-detail">
+        <div class="win-detail-icon">📍</div>
+        <div class="win-detail-content">
+          <div class="win-detail-label">On és</div>
+          <div class="win-detail-text">Corçà, Girona</div>
+          <div class="win-detail-sub">Av. Costa Brava, 6 · 17121 Corçà</div>
+        </div>
+      </div>
+      <div class="win-detail">
+        <div class="win-detail-icon">🦎</div>
+        <div class="win-detail-content">
+          <div class="win-detail-label">L'endemà</div>
+          <div class="win-detail-text">Ornitorepte als Aiguamolls de l'Empordà</div>
+          <div class="win-detail-sub">Diumenge 12 d'abril · Natura i aventura</div>
+        </div>
+      </div>
+    </div>`;
+  area.appendChild(el);
+  const btn = document.createElement('button');
+  btn.className = 'btn-restart btn-restart-outer';
+  btn.textContent = 'Tornar a jugar';
+  btn.onclick = restartGame;
+  area.after(btn);
+  document.getElementById('pathLog').innerHTML = '';
+  renderChips();
+}
+
+function drawWrong(area) {
+  const msgs = [
+    { icon:'🔍', title:'Hmm, no exactament...', sub:'Aquella resposta no encaixa amb el regal.' },
+    { icon:'🤔', title:'Quasi, però no...', sub:'Alguna cosa no quadra. Torna a la pregunta anterior!' },
+    { icon:'😄', title:'Interessant camí!', sub:'Però el regal és una altra cosa.' },
+  ];
+  const m = msgs[Math.floor(Math.random() * msgs.length)];
+  const el = document.createElement('div');
+  el.className = 'screen-wrong';
+  el.innerHTML = `
+    <span class="wrong-icon">${m.icon}</span>
+    <div class="wrong-title">${m.title}</div>
+    <div class="wrong-sub">${m.sub}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:1.2rem">
+      <button class="btn-restart" onclick="goBack()">← Pregunta anterior</button>
+      <button class="btn-restart" onclick="restartGame()">Tornar al principi</button>
+    </div>`;
+  area.appendChild(el);
+  renderChips();
+}
+
+function drawOrni(area) {
+  const el = document.createElement('div');
+  el.className = 'screen-orni';
+  el.innerHTML = `
+    <div class="orni-top">
+      <span class="orni-icon">🦎</span>
+      <div class="orni-title">L'ornitorepte dels Aiguamolls!</div>
+      <div class="orni-sub">Aiguamolls de l'Empordà · Diumenge 12 d'abril</div>
+    </div>
+    <div class="orni-bottom">
+      <div class="orni-msg">Has trobat l'activitat del diumenge...<br>però <em>no és el regal!</em></div>
+      <div class="orni-note">
+        El regal és una altra cosa, i passa el dia <strong>abans</strong> de l'ornitorepte.<br>
+        Torna a intentar-ho i busca per un altre camí! 🍽️
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:1.2rem">
+        <button class="btn-restart" onclick="goBack()">← Pregunta anterior</button>
+        <button class="btn-restart" onclick="restartGame()">Tornar al principi</button>
+      </div>
+    </div>`;
+  area.appendChild(el);
+  renderChips();
+}
+
+function drawWrongChoice(area, opt) {
+  const el = document.createElement('div');
+  el.className = 'screen-wrong';
+  el.innerHTML = `
+    <span class="wrong-icon">🍽️</span>
+    <div class="wrong-title">Molt bon restaurant...</div>
+    <div class="wrong-sub">
+      <strong>${opt.label}</strong> (${opt.location}) és excel·lent,<br>
+      però no és el que t'hem reservat.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:1.2rem">
+      <button class="btn-restart" onclick="goBack()">← Torna a triar</button>
+      <button class="btn-restart" onclick="restartGame()">Tornar al principi</button>
+    </div>`;
+  area.appendChild(el);
+  renderChips();
+}
+
+function renderChips() {
+  const log = document.getElementById('pathLog');
+  log.innerHTML = '';
+  pathLog.forEach((p, i) => {
+    const chip = document.createElement('div');
+    if (p.type === 'choice') {
+      chip.className = 'path-chip chip-choice';
+      chip.textContent = `P${i+1}: ${p.label}`;
+    } else {
+      chip.className = `path-chip ${p.ans ? 'chip-yes' : 'chip-no'}`;
+      chip.textContent = `P${i+1}: ${p.ans ? 'Sí' : 'No'}`;
+    }
+    log.appendChild(chip);
+  });
+}
+
+function answer(isYes) {
+  // Save state before moving
+  history.push({ node: current, stepNum, pathLog: [...pathLog] });
+  pathLog.push({ ans: isYes });
+  stepNum++;
+  current = isYes ? current.yes : current.no;
+  render(current);
+}
+
+function answerChoice(idx) {
+  const opt = current.options[idx];
+  // Save state before moving
+  history.push({ node: current, stepNum, pathLog: [...pathLog] });
+  pathLog.push({ type:'choice', label: opt.label });
+  stepNum++;
+  const area = document.getElementById('gameArea');
+  if (area.firstChild) area.firstChild.classList.add('fade-exit');
+  setTimeout(() => {
+    document.getElementById('gameArea').innerHTML = '';
+    document.querySelectorAll('.btn-restart-outer').forEach(b => b.remove());
+    if (opt.correct) {
+      document.getElementById('stepLabel').textContent = '🎉 Ho has endevinat!';
+      document.getElementById('stepFraction').textContent = '';
+      document.getElementById('progressFill').style.width = '100%';
+      drawWin(document.getElementById('gameArea'));
+    } else {
+      document.getElementById('stepLabel').textContent = '🍽️ No exactament...';
+      document.getElementById('stepFraction').textContent = '';
+      drawWrongChoice(document.getElementById('gameArea'), opt);
+    }
+  }, 260);
+}
+
+function goBack() {
+  if (history.length === 0) { restartGame(); return; }
+  const prev = history.pop();
+  current  = prev.node;
+  stepNum  = prev.stepNum;
+  pathLog  = prev.pathLog;
+  document.querySelectorAll('.btn-restart-outer').forEach(b => b.remove());
+  render(current, true);
+}
+
+function restartGame() {
+  current  = tree;
+  stepNum  = 0;
+  pathLog  = [];
+  history  = [];
+  document.getElementById('progressFill').style.width = '0%';
+  document.querySelectorAll('.btn-restart-outer').forEach(b => b.remove());
+  render(current, false);
+}
+
+render(current, false);
+</script>
+</body>
+</html>
